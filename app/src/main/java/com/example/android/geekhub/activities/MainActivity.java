@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
+import com.annimon.stream.Stream;
 import com.example.android.geekhub.R;
 import com.example.android.geekhub.adapters.BandAdapter;
 import com.example.android.geekhub.adapters.FestivalAdapter;
@@ -167,6 +168,7 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         }
+        allBands = Stream.of(allBands).sorted((b1, b2) -> b1.getName().compareTo(b2.getName())).toList();
         return allBands;
     }
 

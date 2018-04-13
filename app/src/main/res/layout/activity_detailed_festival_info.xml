@@ -5,144 +5,148 @@
     android:id="@+id/view_scroll"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    tools:context=".activities.DetailedFestivalInfoActivity">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context=".activities.DetailedFestivalInfoActivity">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <ImageView
             android:id="@+id/img_logo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_fest_logo"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             tools:ignore="ContentDescription" />
 
-        <ImageView
-            android:id="@+id/img_date"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
-            android:src="@drawable/ic_date"
+        <android.support.v7.widget.GridLayout
+            android:id="@+id/grid"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:columnCount="2"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/img_logo"
-            tools:ignore="ContentDescription" />
+            app:rowCount="4">
+
+            <ImageView
+                android:id="@+id/img_date"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/ic_date"
+                app:layout_columnWeight="1"
+                android:gravity="center_horizontal"
+                app:layout_gravity="fill_horizontal"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/img_activity"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/ic_fest_active"
+                app:layout_columnWeight="1"
+                android:gravity="center_horizontal"
+                app:layout_gravity="fill_horizontal"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/txt_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                app:layout_columnWeight="1"
+                android:gravity="center_horizontal"
+                app:layout_gravity="fill_horizontal"
+                tools:text="DATE" />
+
+            <TextView
+                android:id="@+id/txt_active"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                app:layout_columnWeight="1"
+                android:gravity="center_horizontal"
+                app:layout_gravity="fill_horizontal"
+                tools:text="Activity" />
+
+            <ImageView
+                android:id="@+id/img_location"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/ic_location"
+                app:layout_columnWeight="1"
+                android:gravity="center_horizontal"
+                app:layout_gravity="fill_horizontal"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/img_price"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/ic_price"
+                app:layout_columnWeight="1"
+                android:gravity="center_horizontal"
+                app:layout_gravity="fill_horizontal"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/txt_location"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                app:layout_columnWeight="1"
+                android:gravity="center_horizontal"
+                app:layout_gravity="fill_horizontal"
+                tools:text="Location" />
+
+            <TextView
+                android:id="@+id/txt_price"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                app:layout_columnWeight="1"
+                android:gravity="center_horizontal"
+                app:layout_gravity="fill_horizontal"
+                tools:text="Price" />
+
+        </android.support.v7.widget.GridLayout>
 
         <TextView
-            android:id="@+id/txt_date"
+            android:id="@+id/txt_lineup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_date"
-            tools:text="DATE" />
-
-        <ImageView
-            android:id="@+id/img_activity"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
-            android:src="@drawable/ic_fest_active"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.8"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_logo"
-            tools:ignore="ContentDescription" />
-
-        <TextView
-            android:id="@+id/txt_active"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:text="LINEUP"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.8"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_activity"
-            tools:text="Activity" />
-
-        <ImageView
-            android:id="@+id/img_location"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
-            android:src="@drawable/ic_location"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txt_date"
-            tools:ignore="ContentDescription" />
-
-        <TextView
-            android:id="@+id/txt_location"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_location"
-            tools:text="Location" />
-
-        <ImageView
-            android:id="@+id/img_price"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
-            android:src="@drawable/ic_price"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.8"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txt_active"
-            tools:ignore="ContentDescription" />
-
-        <TextView
-            android:id="@+id/txt_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.8"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_price"
-            tools:text="Price" />
-
-        <TextView
-            android:id="@+id/txt_bands"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txt_location"
-            android:text="BANDS" />
+            app:layout_constraintTop_toBottomOf="@id/grid" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view_bands"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:clickable="true"
             android:clipToPadding="false"
             android:drawSelectorOnTop="true"
             android:focusable="true"
             android:scrollbars="vertical"
-            android:layout_margin="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txt_bands" />
+            app:layout_constraintTop_toBottomOf="@+id/txt_lineup" />
     </android.support.constraint.ConstraintLayout>
 </ScrollView>
