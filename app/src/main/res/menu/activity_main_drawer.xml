@@ -18,17 +18,13 @@
             android:icon="@drawable/ic_search"
             android:title="Search" />
 
-        <item android:title="For Admin">
-            <menu>
-                <item
-                    android:id="@+id/nav_add_fest"
-                    android:icon="@drawable/ic_add_fest"
-                    android:title="Add festival" />
-                <item
-                    android:id="@+id/nav_add_band"
-                    android:icon="@drawable/ic_add_band"
-                    android:title="Add band" />
-            </menu>
-        </item>
+        <item
+            android:id="@+id/nav_add_fest"
+            android:icon="@drawable/ic_add_fest"
+            android:title="Add festival" />
+        <item
+            android:id="@+id/nav_add_band"
+            android:icon="@drawable/ic_add_band"
+            android:title="Add band" />
     </group>
 </menu>

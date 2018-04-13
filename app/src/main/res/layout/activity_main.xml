@@ -19,14 +19,10 @@
 
         <include layout="@layout/activity_search" />
 
-        <!--<include layout="@layout/kidslox_feature_accessibility_item" />
+        <include layout="@layout/activity_add_fest" />
 
-        <include layout="@layout/kidslox_feature_usage_statistic_item" />
-
-        <include layout="@layout/kidslox_feature_notification_item" />
-
-        <include layout="@layout/kidslox_feature_content_blocking_item" />
-    --></ViewFlipper>
+        <include layout="@layout/activity_add_band" />
+    </ViewFlipper>
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"

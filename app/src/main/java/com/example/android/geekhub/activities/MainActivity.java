@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.annimon.stream.Stream;
 import com.example.android.geekhub.R;
 import com.example.android.geekhub.adapters.BandAdapter;
@@ -78,6 +79,12 @@ public class MainActivity extends AppCompatActivity
                     break;
                 case 2:
                     Toast.makeText(MainActivity.this, "Here you can search", Toast.LENGTH_SHORT).show();
+                    break;
+                case 3:
+                    Toast.makeText(MainActivity.this, "Here you can add a festival", Toast.LENGTH_SHORT).show();
+                    break;
+                case 4:
+                    Toast.makeText(MainActivity.this, "Here you can add a band", Toast.LENGTH_SHORT).show();
                     break;
             }
         });
@@ -142,13 +149,51 @@ public class MainActivity extends AppCompatActivity
             setupContentBands();
         } else if (id == R.id.nav_search) {
             viewFlipper.setDisplayedChild(2);
+            setupContentSearch();
         } else if (id == R.id.nav_add_fest) {
+            new MaterialDialog.Builder(this)
+                    .title("ADMIN FUNCTION")
+                    .content("WAIT, THIS FUNCTION IS ONLY AVAILABLE IF YOU ARE THE ADMIN! ARE YOU?")
+                    .positiveColorRes(R.color.colorPrimaryDark)
+                    .negativeColorRes(R.color.colorPrimaryDark)
+                    .positiveText("Ye, sure!")
+                    .negativeText("No, i'm not")
+                    .onNegative((dialog, which) -> item.setChecked(false))
+                    .onPositive((dialog, which) -> {
+                        viewFlipper.setDisplayedChild(3);
+                        setupContentAddFest();
+                    })
+                    .show();
 
         } else if (id == R.id.nav_add_band) {
-
+            new MaterialDialog.Builder(this)
+                    .title("ADMIN FUNCTION")
+                    .content("WAIT, THIS FUNCTION IS ONLY AVAILABLE IF YOU ARE THE ADMIN! ARE YOU?")
+                    .positiveColorRes(R.color.colorPrimaryDark)
+                    .negativeColorRes(R.color.colorPrimaryDark)
+                    .positiveText("Ye, sure!")
+                    .negativeText("No, i'm not")
+                    .onNegative((dialog, which) -> item.setChecked(false))
+                    .onPositive((dialog, which) -> {
+                        viewFlipper.setDisplayedChild(4);
+                        setupContentAddBand();
+                    })
+                    .show();
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void setupContentAddBand() {
+        ((TextView) actionBar.getCustomView().findViewById(R.id.txt_title)).setText("Add band");
+    }
+
+    private void setupContentAddFest() {
+        ((TextView) actionBar.getCustomView().findViewById(R.id.txt_title)).setText("Add festival");
+    }
+
+    private void setupContentSearch() {
+        ((TextView) actionBar.getCustomView().findViewById(R.id.txt_title)).setText("Search");
     }
 
     private void setupContentBands() {
