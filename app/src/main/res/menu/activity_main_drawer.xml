@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_fest_list"
+            android:icon="@drawable/ic_festivals"
+            android:title="Festivals"
+            android:checked="true"/>
+        <item
+            android:id="@+id/nav_band_list"
+            android:icon="@drawable/ic_bands"
+            android:title="Bands" />
+        <item
+            android:id="@+id/nav_search"
+            android:icon="@drawable/ic_search"
+            android:title="Search" />
+    </group>
+
+    <item android:title="For Admin">
+        <menu>
+            <item
+                android:id="@+id/nav_add_fest"
+                android:icon="@drawable/ic_add_fest"
+                android:title="Add festival" />
+            <item
+                android:id="@+id/nav_add_band"
+                android:icon="@drawable/ic_add_band"
+                android:title="Add band" />
+        </menu>
+    </item>
+
+</menu>
