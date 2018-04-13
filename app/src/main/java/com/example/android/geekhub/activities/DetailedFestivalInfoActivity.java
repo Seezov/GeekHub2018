@@ -11,7 +11,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.geekhub.R;
 import com.example.android.geekhub.adapters.BandAdapter;
@@ -40,6 +42,8 @@ public class DetailedFestivalInfoActivity extends AppCompatActivity implements R
     ImageView imgActivity;
     @BindView(R.id.recycler_view_bands)
     RecyclerView recyclerViewBands;
+    @BindView(R.id.view_scroll)
+    ScrollView viewScroll;
 
     ActionBar actionBar;
     Festival festival;
@@ -56,6 +60,10 @@ public class DetailedFestivalInfoActivity extends AppCompatActivity implements R
 
         setupActionBar();
         setupContent();
+        viewScroll.smoothScrollBy(0,0);
+
+        findViewById(R.id.img_help).setOnClickListener(view ->
+                Toast.makeText(DetailedFestivalInfoActivity.this, "Here you can see a detailed info about " + festival.getName(),Toast.LENGTH_SHORT).show());
     }
 
     public void setupActionBar() {

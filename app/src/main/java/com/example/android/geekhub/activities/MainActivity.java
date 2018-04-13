@@ -68,10 +68,17 @@ public class MainActivity extends AppCompatActivity
         setupDrawer();
         setupContentFestivals();
 
-        findViewById(R.id.img_help).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "HELP ME!", Toast.LENGTH_SHORT).show();
+        findViewById(R.id.img_help).setOnClickListener(view -> {
+            switch (viewFlipper.getDisplayedChild()) {
+                case 0:
+                    Toast.makeText(MainActivity.this, "Here you can see a list of festivals", Toast.LENGTH_SHORT).show();
+                    break;
+                case 1:
+                    Toast.makeText(MainActivity.this, "Here you can see a list of bands", Toast.LENGTH_SHORT).show();
+                    break;
+                case 2:
+                    Toast.makeText(MainActivity.this, "Here you can search", Toast.LENGTH_SHORT).show();
+                    break;
             }
         });
     }
@@ -134,7 +141,7 @@ public class MainActivity extends AppCompatActivity
             viewFlipper.setDisplayedChild(1);
             setupContentBands();
         } else if (id == R.id.nav_search) {
-
+            viewFlipper.setDisplayedChild(2);
         } else if (id == R.id.nav_add_fest) {
 
         } else if (id == R.id.nav_add_band) {
@@ -161,9 +168,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     private List<Band> getAllBands() {
-        for (Festival fest : festivals){
-            for (Band band: fest.getBands()) {
-                if(!allBands.contains(band)){
+        for (Festival fest : festivals) {
+            for (Band band : fest.getBands()) {
+                if (!allBands.contains(band)) {
                     allBands.add(band);
                 }
             }
@@ -270,7 +277,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void recyclerViewListClicked(View v, int position) {
-        if(viewFlipper.getDisplayedChild() == 0){
+        if (viewFlipper.getDisplayedChild() == 0) {
             Festival chosenFestival = festivals.get(position);
             Intent intent = new Intent(getApplicationContext(), DetailedFestivalInfoActivity.class);
             intent.putExtra("festival", chosenFestival);

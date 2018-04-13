@@ -17,6 +17,8 @@
 
         <include layout="@layout/activity_bands" />
 
+        <include layout="@layout/activity_search" />
+
         <!--<include layout="@layout/kidslox_feature_accessibility_item" />
 
         <include layout="@layout/kidslox_feature_usage_statistic_item" />

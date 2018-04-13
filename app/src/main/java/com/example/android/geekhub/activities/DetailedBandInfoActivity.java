@@ -5,7 +5,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.geekhub.R;
 import com.example.android.geekhub.entities.Band;
@@ -27,12 +29,13 @@ public class DetailedBandInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detailed_band_info);
         ButterKnife.bind(this);
         actionBar = getSupportActionBar();
-
         Bundle data = getIntent().getExtras();
         band = data.getParcelable("band");
 
         setupActionBar();
         setupContent();
+        findViewById(R.id.img_help).setOnClickListener(view ->
+                Toast.makeText(DetailedBandInfoActivity.this, "Here you can see a detailed info about " + band.getName(),Toast.LENGTH_SHORT).show());
 
     }
 
