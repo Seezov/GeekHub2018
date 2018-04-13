@@ -33,30 +33,6 @@
             tools:text="FEST NAME" />
 
         <ImageView
-            android:id="@+id/img_location"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
-            android:src="@drawable/ic_location"
-            app:layout_constraintStart_toEndOf="@+id/img_logo"
-            app:layout_constraintTop_toBottomOf="@+id/txt_title" />
-
-        <TextView
-            android:id="@+id/txt_location"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="10dp"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-            app:layout_constraintBottom_toBottomOf="@+id/img_location"
-            app:layout_constraintEnd_toStartOf="@+id/img_activity"
-            app:layout_constraintStart_toEndOf="@+id/img_location"
-            app:layout_constraintTop_toTopOf="@+id/img_location"
-            tools:text="LOCATION" />
-
-        <ImageView
             android:id="@+id/img_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -64,7 +40,7 @@
             android:layout_marginTop="10dp"
             android:src="@drawable/ic_date"
             app:layout_constraintStart_toEndOf="@+id/img_logo"
-            app:layout_constraintTop_toBottomOf="@+id/img_location"
+            app:layout_constraintTop_toBottomOf="@+id/txt_title"
             tools:ignore="ContentDescription" />
 
         <TextView
@@ -82,6 +58,30 @@
             tools:text="DATE" />
 
         <ImageView
+            android:id="@+id/img_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/ic_location"
+            app:layout_constraintStart_toEndOf="@+id/img_logo"
+            app:layout_constraintTop_toBottomOf="@+id/img_date" />
+
+        <TextView
+            android:id="@+id/txt_location"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="10dp"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            app:layout_constraintBottom_toBottomOf="@+id/img_location"
+            app:layout_constraintEnd_toStartOf="@+id/img_activity"
+            app:layout_constraintStart_toEndOf="@+id/img_location"
+            app:layout_constraintTop_toTopOf="@+id/img_location"
+            tools:text="LOCATION" />
+
+        <ImageView
             android:id="@+id/img_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -89,7 +89,7 @@
             android:layout_marginTop="10dp"
             android:src="@drawable/ic_price"
             app:layout_constraintStart_toEndOf="@+id/img_logo"
-            app:layout_constraintTop_toBottomOf="@+id/img_date"
+            app:layout_constraintTop_toBottomOf="@+id/img_location"
             tools:ignore="ContentDescription" />
 
         <TextView

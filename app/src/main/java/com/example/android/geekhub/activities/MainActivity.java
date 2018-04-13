@@ -20,16 +20,20 @@ import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.example.android.geekhub.R;
+import com.example.android.geekhub.adapters.BandAdapter;
 import com.example.android.geekhub.adapters.FestivalAdapter;
 import com.example.android.geekhub.entities.Band;
 import com.example.android.geekhub.entities.Festival;
 import com.example.android.geekhub.enums.Genre;
 import com.example.android.geekhub.listeners.RecyclerViewClickListener;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -45,9 +49,12 @@ public class MainActivity extends AppCompatActivity
     NavigationView navigationView;
     @BindView(R.id.recycler_view_festivals)
     RecyclerView recyclerViewFestivals;
+    @BindView(R.id.recycler_view_bands)
+    RecyclerView recyclerViewBands;
 
     ActionBar actionBar;
     List<Festival> festivals;
+    List<Band> allBands = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,6 +131,7 @@ public class MainActivity extends AppCompatActivity
             setupContentFestivals();
         } else if (id == R.id.nav_band_list) {
             viewFlipper.setDisplayedChild(1);
+            setupContentBands();
         } else if (id == R.id.nav_search) {
 
         } else if (id == R.id.nav_add_fest) {
@@ -133,6 +141,33 @@ public class MainActivity extends AppCompatActivity
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void setupContentBands() {
+        setupRecyclerBands();
+    }
+
+    private void setupRecyclerBands() {
+        ((TextView) actionBar.getCustomView().findViewById(R.id.txt_title)).setText("Bands List");
+        BandAdapter mAdapter = new BandAdapter(this, getAllBands(), this);
+        recyclerViewBands.setAdapter(mAdapter);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerViewBands.setLayoutManager(layoutManager);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerViewBands.getContext(),
+                layoutManager.getOrientation());
+        recyclerViewBands.addItemDecoration(dividerItemDecoration);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    private List<Band> getAllBands() {
+        for (Festival fest : festivals){
+            for (Band band: fest.getBands()) {
+                if(!allBands.contains(band)){
+                    allBands.add(band);
+                }
+            }
+        }
+        return allBands;
     }
 
     private void setupContentFestivals() {
@@ -216,10 +251,10 @@ public class MainActivity extends AppCompatActivity
                         35f,
                         bandsFaine, startDateFaine, endDateFaine)
         );
-        setupRecycler();
+        setupRecyclerFestivals();
     }
 
-    private void setupRecycler() {
+    private void setupRecyclerFestivals() {
         ((TextView) actionBar.getCustomView().findViewById(R.id.txt_title)).setText("Festivals List");
         FestivalAdapter mAdapter = new FestivalAdapter(this, festivals, this);
         recyclerViewFestivals.setAdapter(mAdapter);
@@ -233,9 +268,16 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void recyclerViewListClicked(View v, int position) {
-        Festival chosenFestival = festivals.get(position);
-        Intent intent = new Intent(getApplicationContext(), DetailedFestivalInfoActivity.class);
-        intent.putExtra("festival", chosenFestival);
-        startActivity(intent);
+        if(viewFlipper.getDisplayedChild() == 0){
+            Festival chosenFestival = festivals.get(position);
+            Intent intent = new Intent(getApplicationContext(), DetailedFestivalInfoActivity.class);
+            intent.putExtra("festival", chosenFestival);
+            startActivity(intent);
+        } else if (viewFlipper.getDisplayedChild() == 1) {
+            Band chosenBand = allBands.get(position);
+            Intent intent = new Intent(getApplicationContext(), DetailedBandInfoActivity.class);
+            intent.putExtra("band", chosenBand);
+            startActivity(intent);
+        }
     }
 }

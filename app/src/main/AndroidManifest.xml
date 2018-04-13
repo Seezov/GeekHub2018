@@ -18,7 +18,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.DetailedFestivalInfoActivity"></activity>
+        <activity android:name=".activities.DetailedFestivalInfoActivity" />
+        <activity android:name=".activities.DetailedBandInfoActivity"></activity>
     </application>
 
 </manifest>
