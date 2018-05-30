@@ -220,7 +220,9 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         }
-        allBands = Stream.of(allBands).sorted((b1, b2) -> b1.getName().compareTo(b2.getName())).toList();
+        allBands = Stream.of(allBands)
+                .sorted((b1, b2) -> b1.getName().compareTo(b2.getName()))
+                .toList();
         return allBands;
     }
 
