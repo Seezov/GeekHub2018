@@ -13,7 +13,7 @@
             android:id="@+id/img_logo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_band_logo"
+            android:src="@drawable/ic_shop"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -30,30 +30,55 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/img_logo"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Band name" />
+            tools:text="SHOP NAME" />
 
         <ImageView
-            android:id="@+id/img_genre"
+            android:id="@+id/img_ad"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
-            android:src="@drawable/ic_genre"
+            android:src="@drawable/ic_ad"
             app:layout_constraintStart_toEndOf="@+id/img_logo"
-            app:layout_constraintTop_toBottomOf="@+id/txt_title" />
+            app:layout_constraintTop_toBottomOf="@+id/txt_title"
+            tools:ignore="ContentDescription" />
 
         <TextView
-            android:id="@+id/txt_genre"
+            android:id="@+id/txt_number_of_ads"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:layout_marginStart="5dp"
             android:layout_marginTop="10dp"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-            app:layout_constraintBottom_toBottomOf="@+id/img_genre"
-            app:layout_constraintStart_toEndOf="@+id/img_genre"
-            app:layout_constraintTop_toTopOf="@+id/img_genre"
+            app:layout_constraintBottom_toBottomOf="@+id/img_ad"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:text="Genre" />
+            app:layout_constraintStart_toEndOf="@+id/img_space_for_ads"
+            app:layout_constraintTop_toTopOf="@+id/img_ad"
+            tools:text="4" />
+
+        <ImageView
+            android:id="@+id/img_space_for_ads"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/ic_space_for_ads"
+            app:layout_constraintStart_toEndOf="@+id/img_logo"
+            app:layout_constraintTop_toBottomOf="@+id/img_ad" />
+
+        <TextView
+            android:id="@+id/txt_space_for_ads"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="10dp"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            app:layout_constraintBottom_toBottomOf="@+id/img_space_for_ads"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/img_space_for_ads"
+            app:layout_constraintTop_toTopOf="@+id/img_space_for_ads"
+            tools:text="2 of TYPE LARGE, N OF TYPE SMALL" />
     </android.support.constraint.ConstraintLayout>
 </android.support.v7.widget.CardView>

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    tools:context=".activities.DetailedFestivalInfoActivity">
+    tools:context=".activities.DetailedShopInfoActivity">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -17,7 +17,7 @@
             android:id="@+id/img_logo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_fest_logo"
+            android:src="@drawable/ic_shop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -34,92 +34,48 @@
             app:rowCount="4">
 
             <ImageView
-                android:id="@+id/img_date"
+                android:id="@+id/img_ad"
                 android:layout_width="0dp"
                 android:layout_height="60dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
-                android:src="@drawable/ic_date"
+                android:src="@drawable/ic_ad"
                 app:layout_columnWeight="1"
                 android:gravity="center_horizontal"
                 app:layout_gravity="fill_horizontal"
                 tools:ignore="ContentDescription" />
 
             <ImageView
-                android:id="@+id/img_activity"
+                android:id="@+id/img_spaces"
                 android:layout_width="0dp"
                 android:layout_height="60dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
-                android:src="@drawable/ic_fest_active"
+                android:src="@drawable/ic_space_for_ads"
                 app:layout_columnWeight="1"
                 android:gravity="center_horizontal"
                 app:layout_gravity="fill_horizontal"
                 tools:ignore="ContentDescription" />
 
             <TextView
-                android:id="@+id/txt_date"
+                android:id="@+id/txt_number_of_ads"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                 app:layout_columnWeight="1"
                 android:gravity="center_horizontal"
                 app:layout_gravity="fill_horizontal"
-                tools:text="DATE" />
+                tools:text="4" />
 
             <TextView
-                android:id="@+id/txt_active"
+                android:id="@+id/txt_spaces"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                 app:layout_columnWeight="1"
                 android:gravity="center_horizontal"
                 app:layout_gravity="fill_horizontal"
-                tools:text="Activity" />
-
-            <ImageView
-                android:id="@+id/img_location"
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:src="@drawable/ic_location"
-                app:layout_columnWeight="1"
-                android:gravity="center_horizontal"
-                app:layout_gravity="fill_horizontal"
-                tools:ignore="ContentDescription" />
-
-            <ImageView
-                android:id="@+id/img_price"
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:src="@drawable/ic_price"
-                app:layout_columnWeight="1"
-                android:gravity="center_horizontal"
-                app:layout_gravity="fill_horizontal"
-                tools:ignore="ContentDescription" />
-
-            <TextView
-                android:id="@+id/txt_location"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-                app:layout_columnWeight="1"
-                android:gravity="center_horizontal"
-                app:layout_gravity="fill_horizontal"
-                tools:text="Location" />
-
-            <TextView
-                android:id="@+id/txt_price"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-                app:layout_columnWeight="1"
-                android:gravity="center_horizontal"
-                app:layout_gravity="fill_horizontal"
-                tools:text="Price" />
+                tools:text="SpaceForAds" />
 
         </android.support.v7.widget.GridLayout>
 
@@ -128,14 +84,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="LINEUP"
+            android:text="ADS"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/grid" />
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view_bands"
+            android:id="@+id/recycler_view_ads"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"

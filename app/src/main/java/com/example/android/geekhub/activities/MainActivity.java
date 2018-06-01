@@ -20,22 +20,22 @@ import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.annimon.stream.Stream;
 import com.example.android.geekhub.R;
-import com.example.android.geekhub.adapters.BandAdapter;
-import com.example.android.geekhub.adapters.FestivalAdapter;
-import com.example.android.geekhub.entities.Band;
-import com.example.android.geekhub.entities.Festival;
-import com.example.android.geekhub.enums.Genre;
+import com.example.android.geekhub.adapters.ShopAdapter;
+import com.example.android.geekhub.entities.Ad;
+import com.example.android.geekhub.entities.Shop;
+import com.example.android.geekhub.entities.SpaceForAds;
+import com.example.android.geekhub.enums.DesignType;
+import com.example.android.geekhub.enums.Dimension;
+import com.example.android.geekhub.enums.MaterialType;
+import com.example.android.geekhub.enums.SpaceType;
 import com.example.android.geekhub.listeners.RecyclerViewClickListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,12 +51,11 @@ public class MainActivity extends AppCompatActivity
     NavigationView navigationView;
     @BindView(R.id.recycler_view_festivals)
     RecyclerView recyclerViewFestivals;
-    @BindView(R.id.recycler_view_bands)
-    RecyclerView recyclerViewBands;
+/*    @BindView(R.id.recycler_view_bands)
+    RecyclerView recyclerViewAds;*/
 
     ActionBar actionBar;
-    List<Festival> festivals;
-    List<Band> allBands = new ArrayList<>();
+    List<Shop> shops = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,19 +71,10 @@ public class MainActivity extends AppCompatActivity
         findViewById(R.id.img_help).setOnClickListener(view -> {
             switch (viewFlipper.getDisplayedChild()) {
                 case 0:
-                    Toast.makeText(MainActivity.this, "Here you can see a list of festivals", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Here you can see a list of shops", Toast.LENGTH_SHORT).show();
                     break;
                 case 1:
-                    Toast.makeText(MainActivity.this, "Here you can see a list of bands", Toast.LENGTH_SHORT).show();
-                    break;
-                case 2:
-                    Toast.makeText(MainActivity.this, "Here you can search", Toast.LENGTH_SHORT).show();
-                    break;
-                case 3:
-                    Toast.makeText(MainActivity.this, "Here you can add a festival", Toast.LENGTH_SHORT).show();
-                    break;
-                case 4:
-                    Toast.makeText(MainActivity.this, "Here you can add a band", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Here you can add an ad", Toast.LENGTH_SHORT).show();
                     break;
             }
         });
@@ -141,16 +131,10 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_fest_list) {
+        if (id == R.id.nav_shop_list) {
             viewFlipper.setDisplayedChild(0);
             setupContentFestivals();
-        } else if (id == R.id.nav_band_list) {
-            viewFlipper.setDisplayedChild(1);
-            setupContentBands();
-        } else if (id == R.id.nav_search) {
-            viewFlipper.setDisplayedChild(2);
-            setupContentSearch();
-        } else if (id == R.id.nav_add_fest) {
+        } else if (id == R.id.nav_add_ad) {
             new MaterialDialog.Builder(this)
                     .title("ADMIN FUNCTION")
                     .content("WAIT, THIS FUNCTION IS ONLY AVAILABLE IF YOU ARE THE ADMIN! ARE YOU?")
@@ -160,36 +144,22 @@ public class MainActivity extends AppCompatActivity
                     .negativeText("No, i'm not")
                     .onNegative((dialog, which) -> item.setChecked(false))
                     .onPositive((dialog, which) -> {
-                        viewFlipper.setDisplayedChild(3);
-                        setupContentAddFest();
+                        viewFlipper.setDisplayedChild(1);
+                        setupContentAddAD();
                     })
                     .show();
 
-        } else if (id == R.id.nav_add_band) {
-            new MaterialDialog.Builder(this)
-                    .title("ADMIN FUNCTION")
-                    .content("WAIT, THIS FUNCTION IS ONLY AVAILABLE IF YOU ARE THE ADMIN! ARE YOU?")
-                    .positiveColorRes(R.color.colorPrimaryDark)
-                    .negativeColorRes(R.color.colorPrimaryDark)
-                    .positiveText("Ye, sure!")
-                    .negativeText("No, i'm not")
-                    .onNegative((dialog, which) -> item.setChecked(false))
-                    .onPositive((dialog, which) -> {
-                        viewFlipper.setDisplayedChild(4);
-                        setupContentAddBand();
-                    })
-                    .show();
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    private void setupContentAddBand() {
-        ((TextView) actionBar.getCustomView().findViewById(R.id.txt_title)).setText("Add band");
+    private void setupContentAddAD() {
+        ((TextView) actionBar.getCustomView().findViewById(R.id.txt_title)).setText("Add ad");
     }
 
-    private void setupContentAddFest() {
-        ((TextView) actionBar.getCustomView().findViewById(R.id.txt_title)).setText("Add festival");
+   /* private void setupContentAddBand() {
+        ((TextView) actionBar.getCustomView().findViewById(R.id.txt_title)).setText("Add band");
     }
 
     private void setupContentSearch() {
@@ -202,117 +172,94 @@ public class MainActivity extends AppCompatActivity
 
     private void setupRecyclerBands() {
         ((TextView) actionBar.getCustomView().findViewById(R.id.txt_title)).setText("Bands List");
-        BandAdapter mAdapter = new BandAdapter(this, getAllBands(), this);
-        recyclerViewBands.setAdapter(mAdapter);
+        AdAdapter mAdapter = new AdAdapter(this, getAllAds());
+        recyclerViewAds.setAdapter(mAdapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerViewBands.setLayoutManager(layoutManager);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerViewBands.getContext(),
+        recyclerViewAds.setLayoutManager(layoutManager);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerViewAds.getContext(),
                 layoutManager.getOrientation());
-        recyclerViewBands.addItemDecoration(dividerItemDecoration);
+        recyclerViewAds.addItemDecoration(dividerItemDecoration);
         mAdapter.notifyDataSetChanged();
-    }
+    }*/
 
-    private List<Band> getAllBands() {
-        for (Festival fest : festivals) {
-            for (Band band : fest.getBands()) {
-                if (!allBands.contains(band)) {
-                    allBands.add(band);
+/*    private List<Ad> getAllAds() {
+        for (Shop fest : shops) {
+            for (Ad ad : fest.getAds()) {
+                if (!allAds.contains(ad)) {
+                    allAds.add(ad);
                 }
             }
         }
-        allBands = Stream.of(allBands)
+        allAds = Stream.of(allAds)
                 .sorted((b1, b2) -> b1.getName().compareTo(b2.getName()))
                 .toList();
-        return allBands;
-    }
+        return allAds;
+    }*/
 
     private void setupContentFestivals() {
         // TODO: LOAD FESTS AND BANDS FROM DB
-        List<Band> bandsRAM = Arrays.asList(
-                new Band("Foo Fighters", Arrays.asList(Genre.ROCK)),
-                new Band("Red Hot Chili Peppers", Arrays.asList(Genre.FUNK, Genre.ROCK)),
-                new Band("Pendulum", Arrays.asList(Genre.ELECTRONIC, Genre.ROCK)));
-
-        List<Band> bandsAftershock = Arrays.asList(
-                new Band("System Of A Down", Arrays.asList(Genre.METAL)),
-                new Band("Seether", Arrays.asList(Genre.POST_GRUNGE, Genre.ROCK)),
-                new Band("Eminem", Arrays.asList(Genre.RAP, Genre.POP)));
-
-        List<Band> bandsFaine = Arrays.asList(
-                new Band("The Rasmus", Arrays.asList(Genre.ROCK, Genre.POP)),
-                new Band("The Gitas", Arrays.asList(Genre.POST_GRUNGE, Genre.ROCK)),
-                new Band("DASH", Arrays.asList(Genre.METAL, Genre.RAP)));
-
-        List<Band> bandsResp = Arrays.asList(
-                new Band("IGNEA", Arrays.asList(Genre.METAL)),
-                new Band("Vivienne Mort", Arrays.asList(Genre.POP, Genre.ROCK)),
-                new Band("AHHA", Arrays.asList(Genre.METAL, Genre.RAP)));
-
+        shops.clear();
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, 2018);
-        cal.set(Calendar.MONTH, Calendar.JUNE);
-        cal.set(Calendar.DAY_OF_MONTH, 1);
-        Date startDateRAM = cal.getTime();
-        cal.set(Calendar.YEAR, 2018);
-        cal.set(Calendar.MONTH, Calendar.JUNE);
-        cal.set(Calendar.DAY_OF_MONTH, 3);
-        Date endDateRAM = cal.getTime();
-
-        cal.set(Calendar.YEAR, 2018);
-        cal.set(Calendar.MONTH, Calendar.OCTOBER);
-        cal.set(Calendar.DAY_OF_MONTH, 13);
-        Date startDateAftershock = cal.getTime();
-        cal.set(Calendar.YEAR, 2018);
-        cal.set(Calendar.MONTH, Calendar.OCTOBER);
-        cal.set(Calendar.DAY_OF_MONTH, 14);
-        Date endDateAftershock = cal.getTime();
-
-        cal.set(Calendar.YEAR, 2018);
-        cal.set(Calendar.MONTH, Calendar.JULY);
+        cal.set(Calendar.MONTH, Calendar.MAY);
         cal.set(Calendar.DAY_OF_MONTH, 20);
-        Date startDateFaine = cal.getTime();
+        Date startDate1 = cal.getTime();
         cal.set(Calendar.YEAR, 2018);
-        cal.set(Calendar.MONTH, Calendar.JULY);
-        cal.set(Calendar.DAY_OF_MONTH, 22);
-        Date endDateFaine = cal.getTime();
-
-        cal.set(Calendar.YEAR, 2017);
-        cal.set(Calendar.MONTH, Calendar.SEPTEMBER);
-        cal.set(Calendar.DAY_OF_MONTH, 1);
-        Date startResp = cal.getTime();
-        cal.set(Calendar.YEAR, 2017);
-        cal.set(Calendar.MONTH, Calendar.SEPTEMBER);
+        cal.set(Calendar.MONTH, Calendar.JUNE);
         cal.set(Calendar.DAY_OF_MONTH, 3);
-        Date endDateResp = cal.getTime();
+        Date endDate1 = cal.getTime();
 
-        festivals = Arrays.asList(
-                new Festival(
-                        "Rock am Ring",
-                        "Nürburg, Germany",
-                        230f,
-                        bandsRAM, startDateRAM, endDateRAM),
-                new Festival(
-                        "Aftershock",
-                        "California, United States",
-                        150f,
-                        bandsAftershock, startDateAftershock, endDateAftershock),
-                new Festival(
-                        "RespublicaFEST",
-                        "Kamyanets-Podilsky, Ukraine",
-                        17f,
-                        bandsResp, startResp, endDateResp),
-                new Festival(
-                        "Faine Misto",
-                        "Ternopil, Ukraine",
-                        35f,
-                        bandsFaine, startDateFaine, endDateFaine)
+        List<Ad> addsSilpo = Arrays.asList(
+                new Ad("FOTIUS", startDate1, endDate1, Dimension.LARGE, MaterialType.PAPER, DesignType.EXPENSIVE),
+                new Ad("SKIDKA NA SHAMPYN", startDate1, endDate1, Dimension.LARGE, MaterialType.METAL, DesignType.EXPENSIVE)
         );
-        setupRecyclerFestivals();
+
+        List<SpaceForAds> spaceForAdsSilpo = Arrays.asList(
+                new SpaceForAds(SpaceType.WALL, Dimension.LARGE),
+                new SpaceForAds(SpaceType.STAND, Dimension.LARGE),
+                new SpaceForAds(SpaceType.WALL, Dimension.SMALL)
+        );
+
+        cal.set(Calendar.YEAR, 2018);
+        cal.set(Calendar.MONTH, Calendar.MAY);
+        cal.set(Calendar.DAY_OF_MONTH, 30);
+        Date startDate2 = cal.getTime();
+        cal.set(Calendar.YEAR, 2018);
+        cal.set(Calendar.MONTH, Calendar.JUNE);
+        cal.set(Calendar.DAY_OF_MONTH, 6);
+        Date endDate2 = cal.getTime();
+
+        cal.set(Calendar.YEAR, 2018);
+        cal.set(Calendar.MONTH, Calendar.JUNE);
+        cal.set(Calendar.DAY_OF_MONTH, 4);
+        Date startDate3 = cal.getTime();
+        cal.set(Calendar.YEAR, 2018);
+        cal.set(Calendar.MONTH, Calendar.JUNE);
+        cal.set(Calendar.DAY_OF_MONTH, 14);
+        Date endDate3 = cal.getTime();
+
+        List<Ad> addsAtb = Arrays.asList(
+                new Ad("FOTIUS", startDate1, endDate1, Dimension.SMALL, MaterialType.PAPER, DesignType.CHEAP),
+                new Ad("SKIDKA NA OCHKI", startDate2, endDate2, Dimension.SMALL, MaterialType.METAL, DesignType.EXPENSIVE),
+                new Ad("Summer festival ad",  startDate2, endDate2, Dimension.SMALL, MaterialType.PAPER, DesignType.CHEAP),
+                new Ad("NEW iPHONE", startDate3, endDate3, Dimension.SMALL, MaterialType.METAL, DesignType.CHEAP)
+        );
+        List<SpaceForAds> spacesForAdsAtb = Arrays.asList(
+                new SpaceForAds(SpaceType.WALL, Dimension.SMALL),
+                new SpaceForAds(SpaceType.WALL, Dimension.SMALL),
+                new SpaceForAds(SpaceType.WALL, Dimension.SMALL)
+        );
+
+        shops.addAll(Arrays.asList(
+                new Shop("Silpo", addsSilpo, spaceForAdsSilpo),
+                new Shop("ATB", addsAtb, spacesForAdsAtb)
+        ));
+        setupRecyclerShops();
     }
 
-    private void setupRecyclerFestivals() {
-        ((TextView) actionBar.getCustomView().findViewById(R.id.txt_title)).setText("Festivals List");
-        FestivalAdapter mAdapter = new FestivalAdapter(this, festivals, this);
+    private void setupRecyclerShops() {
+        ((TextView) actionBar.getCustomView().findViewById(R.id.txt_title)).setText("Shops List");
+        ShopAdapter mAdapter = new ShopAdapter(this, shops, this);
         recyclerViewFestivals.setAdapter(mAdapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerViewFestivals.setLayoutManager(layoutManager);
@@ -325,15 +272,12 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void recyclerViewListClicked(View v, int position) {
         if (viewFlipper.getDisplayedChild() == 0) {
-            Festival chosenFestival = festivals.get(position);
-            Intent intent = new Intent(getApplicationContext(), DetailedFestivalInfoActivity.class);
-            intent.putExtra("festival", chosenFestival);
+            Shop chosenShop = shops.get(position);
+            Intent intent = new Intent(getApplicationContext(), DetailedShopInfoActivity.class);
+            intent.putExtra("shop", chosenShop);
             startActivity(intent);
         } else if (viewFlipper.getDisplayedChild() == 1) {
-            Band chosenBand = allBands.get(position);
-            Intent intent = new Intent(getApplicationContext(), DetailedBandInfoActivity.class);
-            intent.putExtra("band", chosenBand);
-            startActivity(intent);
+            // TODO Add new ad;
         }
     }
 }

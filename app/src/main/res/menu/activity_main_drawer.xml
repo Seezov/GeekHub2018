@@ -5,26 +5,26 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_fest_list"
+            android:id="@+id/nav_shop_list"
             android:checked="true"
-            android:icon="@drawable/ic_festivals"
-            android:title="Festivals" />
-        <item
+            android:icon="@drawable/ic_shop_list"
+            android:title="Shops" />
+<!--        <item
             android:id="@+id/nav_band_list"
             android:icon="@drawable/ic_bands"
             android:title="Bands" />
         <item
             android:id="@+id/nav_search"
             android:icon="@drawable/ic_search"
-            android:title="Search" />
+            android:title="Search" />-->
 
         <item
-            android:id="@+id/nav_add_fest"
-            android:icon="@drawable/ic_add_fest"
-            android:title="Add festival" />
-        <item
+            android:id="@+id/nav_add_ad"
+            android:icon="@drawable/ic_add_an_ad"
+            android:title="Add an advertisement" />
+<!--        <item
             android:id="@+id/nav_add_band"
             android:icon="@drawable/ic_add_band"
-            android:title="Add band" />
+            android:title="Add ad" />-->
     </group>
 </menu>

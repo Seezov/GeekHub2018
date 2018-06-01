@@ -13,15 +13,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <include layout="@layout/activity_festivals" />
+        <include layout="@layout/activity_shops" />
 
-        <include layout="@layout/activity_bands" />
+        <include layout="@layout/activity_add_ad" />
 
-        <include layout="@layout/activity_search" />
-
-        <include layout="@layout/activity_add_fest" />
-
-        <include layout="@layout/activity_add_band" />
     </ViewFlipper>
 
     <android.support.design.widget.NavigationView
