@@ -22,6 +22,7 @@ import android.widget.ViewFlipper;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.android.geekhub.R;
 import com.example.android.geekhub.adapters.ShopAdapter;
+import com.example.android.geekhub.dao.ShopDAO;
 import com.example.android.geekhub.entities.Ad;
 import com.example.android.geekhub.entities.Shop;
 import com.example.android.geekhub.entities.SpaceForAds;
@@ -49,8 +50,9 @@ public class MainActivity extends AppCompatActivity
     ViewFlipper viewFlipper;
     @BindView(R.id.nav_view)
     NavigationView navigationView;
-    @BindView(R.id.recycler_view_festivals)
-    RecyclerView recyclerViewFestivals;
+    @BindView(R.id.recycler_view_shops)
+    RecyclerView recyclerViewShops;
+    private ShopDAO mShopDao;
 /*    @BindView(R.id.recycler_view_bands)
     RecyclerView recyclerViewAds;*/
 
@@ -66,7 +68,17 @@ public class MainActivity extends AppCompatActivity
 
         setupActionBar();
         setupDrawer();
-        setupContentFestivals();
+        // fill the listView
+        mShopDao = new ShopDAO(this);
+        shops = mShopDao.getAllShops();
+        if (shops != null && !shops.isEmpty()) {
+            setupRecyclerShops();
+        } else {
+            mShopDao.createShop("SILPO");
+            mShopDao.createShop("ATB");
+        }
+
+        //setupContentFestivals();
 
         findViewById(R.id.img_help).setOnClickListener(view -> {
             switch (viewFlipper.getDisplayedChild()) {
@@ -241,7 +253,7 @@ public class MainActivity extends AppCompatActivity
         List<Ad> addsAtb = Arrays.asList(
                 new Ad("FOTIUS", startDate1, endDate1, Dimension.SMALL, MaterialType.PAPER, DesignType.CHEAP),
                 new Ad("SKIDKA NA OCHKI", startDate2, endDate2, Dimension.SMALL, MaterialType.METAL, DesignType.EXPENSIVE),
-                new Ad("Summer festival ad",  startDate2, endDate2, Dimension.SMALL, MaterialType.PAPER, DesignType.CHEAP),
+                new Ad("Summer festival ad", startDate2, endDate2, Dimension.SMALL, MaterialType.PAPER, DesignType.CHEAP),
                 new Ad("NEW iPHONE", startDate3, endDate3, Dimension.SMALL, MaterialType.METAL, DesignType.CHEAP)
         );
         List<SpaceForAds> spacesForAdsAtb = Arrays.asList(
@@ -260,22 +272,22 @@ public class MainActivity extends AppCompatActivity
     private void setupRecyclerShops() {
         ((TextView) actionBar.getCustomView().findViewById(R.id.txt_title)).setText("Shops List");
         ShopAdapter mAdapter = new ShopAdapter(this, shops, this);
-        recyclerViewFestivals.setAdapter(mAdapter);
+        recyclerViewShops.setAdapter(mAdapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerViewFestivals.setLayoutManager(layoutManager);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerViewFestivals.getContext(),
+        recyclerViewShops.setLayoutManager(layoutManager);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerViewShops.getContext(),
                 layoutManager.getOrientation());
-        recyclerViewFestivals.addItemDecoration(dividerItemDecoration);
+        recyclerViewShops.addItemDecoration(dividerItemDecoration);
         mAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void recyclerViewListClicked(View v, int position) {
         if (viewFlipper.getDisplayedChild() == 0) {
-            Shop chosenShop = shops.get(position);
+            /*Shop chosenShop = shops.get(position);
             Intent intent = new Intent(getApplicationContext(), DetailedShopInfoActivity.class);
             intent.putExtra("shop", chosenShop);
-            startActivity(intent);
+            startActivity(intent);*/
         } else if (viewFlipper.getDisplayedChild() == 1) {
             // TODO Add new ad;
         }

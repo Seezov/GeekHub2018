@@ -1,19 +1,19 @@
 package com.example.android.geekhub.entities;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.example.android.geekhub.enums.Dimension;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
-public class Shop implements Parcelable {
+public class Shop {
 
+    private Long id;
     private String name;
     private List<Ad> ads;
     private List<SpaceForAds> spacesForAds;
+
+    public Shop (){
+
+    }
 
     public Shop(String name, List<Ad> ads, List<SpaceForAds> spacesForAds) {
         this.name = name;
@@ -61,35 +61,11 @@ public class Shop implements Parcelable {
         return "There are " + largeSpaces + " large spaces and " + smallSpaces + " small spaces.";
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public Long getId() {
+        return id;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.name);
-        dest.writeList(this.ads);
-        dest.writeList(this.spacesForAds);
+    public void setId(Long id) {
+        this.id = id;
     }
-
-    protected Shop(Parcel in) {
-        this.name = in.readString();
-        this.ads = new ArrayList<Ad>();
-        in.readList(this.ads, Ad.class.getClassLoader());
-        this.spacesForAds = new ArrayList<SpaceForAds>();
-        in.readList(this.spacesForAds, SpaceForAds.class.getClassLoader());
-    }
-
-    public static final Creator<Shop> CREATOR = new Creator<Shop>() {
-        @Override
-        public Shop createFromParcel(Parcel source) {
-            return new Shop(source);
-        }
-
-        @Override
-        public Shop[] newArray(int size) {
-            return new Shop[size];
-        }
-    };
 }
