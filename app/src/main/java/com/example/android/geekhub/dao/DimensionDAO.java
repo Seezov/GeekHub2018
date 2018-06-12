@@ -7,41 +7,23 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.example.android.geekhub.db.DBHelper;
 import com.example.android.geekhub.entities.Dimension;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DimensionDAO {
+public class DimensionDAO extends BaseDAO {
 
     public static final String TAG = "DimensionDAO";
 
     // Database fields
-    private SQLiteDatabase mDatabase;
-    private DBHelper mDbHelper;
-    private Context mContext;
     private String[] mAllColumns = {
             DBHelper.COLUMN_DIMENSION_ID,
             DBHelper.COLUMN_DIMENSION_NAME};
 
     public DimensionDAO(Context context) {
-        this.mContext = context;
-        mDbHelper = new DBHelper(context);
-        // open the database
-        try {
-            open();
-        } catch (SQLException e) {
-            Log.e(TAG, "SQLException on opening database " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
-    public void open() throws SQLException {
-        mDatabase = mDbHelper.getWritableDatabase();
-    }
-
-    public void close() {
-        mDbHelper.close();
+        super(context);
     }
 
     public Dimension createDimension(String name) {
@@ -60,7 +42,7 @@ public class DimensionDAO {
 
     public Boolean updateDimension(Long id, String name) {
         ContentValues values = new ContentValues();
-        values.put(DBHelper.COLUMN_SHOP_NAME, name);
+        values.put(DBHelper.COLUMN_DIMENSION_NAME, name);
         int result = mDatabase.update(DBHelper.TABLE_DIMENSIONS, values, DBHelper.COLUMN_DIMENSION_ID + id, null);
         return result > 0;
     }

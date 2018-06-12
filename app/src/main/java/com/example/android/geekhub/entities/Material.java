@@ -1,17 +1,17 @@
 package com.example.android.geekhub.entities;
 
-import com.example.android.geekhub.enums.SpaceType;
+import com.example.android.geekhub.enums.MaterialType;
 
-public class Space {
+public class Material {
 
     private long id;
-    @SpaceType
+    @MaterialType
     private String name;
 
-    public Space() {
+    public Material() {
     }
 
-    public Space(long id, String name) {
+    public Material(long id, String name) {
         this.id = id;
         this.name = name;
     }

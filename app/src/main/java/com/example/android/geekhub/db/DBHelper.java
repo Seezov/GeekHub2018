@@ -1,4 +1,4 @@
-package com.example.android.geekhub.dao;
+package com.example.android.geekhub.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -47,7 +47,6 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String COLUMN_ADS_IN_SHOPS_AD_ID = COLUMN_AD_ID;
     public static final String COLUMN_ADS_IN_SHOPS_SHOP_ID = COLUMN_SHOP_ID;
 
-
     // columns of the materialTypes table
     public static final String TABLE_MATERIAL_TYPES = "materialTypes";
     public static final String COLUMN_MATERIAL_TYPE_ID = "idMaterialType";
@@ -63,8 +62,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
     // columns of the orders table
     public static final String TABLE_ORDERS = "orders";
-    public static final String COLUMN_ORDER_AD_ID = COLUMN_AD_ID;
-    public static final String COLUMN_ORDER_SHOP_ID = COLUMN_SHOP_ID;
+    public static final String COLUMN_ORDER_AD_ID = COLUMN_ADS_IN_SHOPS_AD_ID;
+    public static final String COLUMN_ORDER_SHOP_ID = COLUMN_ADS_IN_SHOPS_SHOP_ID;
     public static final String COLUMN_ORDER_MATERIAL_TYPE__ID = COLUMN_MATERIAL_TYPE_ID;
     public static final String COLUMN_ORDER_DIMENSION_ID = COLUMN_DIMENSION_ID;
     public static final String COLUMN_ORDER_DESIGN_ID = COLUMN_DESIGN_ID;

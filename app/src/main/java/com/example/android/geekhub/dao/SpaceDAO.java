@@ -7,42 +7,23 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.example.android.geekhub.entities.Dimension;
+import com.example.android.geekhub.db.DBHelper;
 import com.example.android.geekhub.entities.Space;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SpaceDAO {
+public class SpaceDAO extends BaseDAO {
 
     public static final String TAG = "SpaceDAO";
 
     // Database fields
-    private SQLiteDatabase mDatabase;
-    private DBHelper mDbHelper;
-    private Context mContext;
     private String[] mAllColumns = {
             DBHelper.COLUMN_SPACE_TYPE_ID,
             DBHelper.COLUMN_SPACE_TYPE_NAME};
 
     public SpaceDAO(Context context) {
-        this.mContext = context;
-        mDbHelper = new DBHelper(context);
-        // open the database
-        try {
-            open();
-        } catch (SQLException e) {
-            Log.e(TAG, "SQLException on opening database " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
-    public void open() throws SQLException {
-        mDatabase = mDbHelper.getWritableDatabase();
-    }
-
-    public void close() {
-        mDbHelper.close();
+        super(context);
     }
 
     public Space createSpace(String name) {

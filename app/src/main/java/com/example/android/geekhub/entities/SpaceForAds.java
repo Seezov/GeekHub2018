@@ -1,11 +1,5 @@
 package com.example.android.geekhub.entities;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
-import com.example.android.geekhub.enums.DimensionType;
-import com.example.android.geekhub.enums.SpaceType;
-
 public class SpaceForAds {
 
     private Long idShop;

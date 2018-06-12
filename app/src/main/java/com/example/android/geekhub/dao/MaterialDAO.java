@@ -8,42 +8,42 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.example.android.geekhub.db.DBHelper;
-import com.example.android.geekhub.entities.Shop;
+import com.example.android.geekhub.entities.Material;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShopDAO extends BaseDAO {
+public class MaterialDAO extends BaseDAO {
 
-    public static final String TAG = "ShopDAO";
+    public static final String TAG = "MaterialDAO";
 
     // Database fields
     private String[] mAllColumns = {
-            DBHelper.COLUMN_SHOP_ID,
-            DBHelper.COLUMN_SHOP_NAME};
+            DBHelper.COLUMN_MATERIAL_TYPE_ID,
+            DBHelper.COLUMN_MATERIAL_TYPE_NAME};
 
-    public ShopDAO(Context context) {
+    public MaterialDAO(Context context) {
         super(context);
     }
 
-    public Shop createShop(String name) {
+    public Material createMaterial(String name) {
         ContentValues values = new ContentValues();
-        values.put(DBHelper.COLUMN_SHOP_NAME, name);
+        values.put(DBHelper.COLUMN_MATERIAL_TYPE_NAME, name);
         long insertId = mDatabase
-                .insert(DBHelper.TABLE_SHOPS, null, values);
-        Cursor cursor = mDatabase.query(DBHelper.TABLE_SHOPS, mAllColumns,
-                DBHelper.COLUMN_SHOP_ID + " = " + insertId, null, null,
+                .insert(DBHelper.TABLE_MATERIAL_TYPES, null, values);
+        Cursor cursor = mDatabase.query(DBHelper.TABLE_MATERIAL_TYPES, mAllColumns,
+                DBHelper.COLUMN_MATERIAL_TYPE_ID + " = " + insertId, null, null,
                 null, null);
         cursor.moveToFirst();
-        Shop newShop = cursorToShop(cursor);
+        Material newMaterial = cursorToMaterial(cursor);
         cursor.close();
-        return newShop;
+        return newMaterial;
     }
 
-    public Boolean updateShop(Long id, String name) {
+    public Boolean updateMaterial(Long id, String name) {
         ContentValues values = new ContentValues();
-        values.put(DBHelper.COLUMN_SHOP_NAME, name);
-        int result = mDatabase.update(DBHelper.TABLE_SHOPS, values, DBHelper.COLUMN_SHOP_ID + id, null);
+        values.put(DBHelper.COLUMN_MATERIAL_TYPE_NAME, name);
+        int result = mDatabase.update(DBHelper.TABLE_MATERIAL_TYPES, values, DBHelper.COLUMN_MATERIAL_TYPE_ID + id, null);
         return result > 0;
     }
 
@@ -63,40 +63,39 @@ public class ShopDAO extends BaseDAO {
                 + " = " + id, null);
     }*/
 
-    public List<Shop> getAllShops() {
-        List<Shop> listShops = new ArrayList<>();
+    public List<Material> getAllShops() {
+        List<Material> listMaterials = new ArrayList<>();
 
-        Cursor cursor = mDatabase.query(DBHelper.TABLE_SHOPS, mAllColumns,
+        Cursor cursor = mDatabase.query(DBHelper.TABLE_MATERIAL_TYPES, mAllColumns,
                 null, null, null, null, null);
         if (cursor != null) {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
-                Shop shop = cursorToShop(cursor);
-                listShops.add(shop);
+                Material material = cursorToMaterial(cursor);
+                listMaterials.add(material);
                 cursor.moveToNext();
             }
 
             // make sure to close the cursor
             cursor.close();
         }
-        return listShops;
+        return listMaterials;
     }
 
-    public Shop getShopById(long id) {
-        Cursor cursor = mDatabase.query(DBHelper.TABLE_SHOPS, mAllColumns,
-                DBHelper.COLUMN_SHOP_ID + " = ?",
+    public Material getMaterialById(long id) {
+        Cursor cursor = mDatabase.query(DBHelper.TABLE_MATERIAL_TYPES, mAllColumns,
+                DBHelper.COLUMN_MATERIAL_TYPE_ID + " = ?",
                 new String[]{String.valueOf(id)}, null, null, null);
         if (cursor != null) {
             cursor.moveToFirst();
         }
-
-        return cursorToShop(cursor);
+        return cursorToMaterial(cursor);
     }
 
-    protected Shop cursorToShop(Cursor cursor) {
-        Shop shop = new Shop();
-        shop.setId(cursor.getLong(0));
-        shop.setName(cursor.getString(1));
-        return shop;
+    protected Material cursorToMaterial(Cursor cursor) {
+        Material material = new Material();
+        material.setId(cursor.getLong(0));
+        material.setName(cursor.getString(1));
+        return material;
     }
 }

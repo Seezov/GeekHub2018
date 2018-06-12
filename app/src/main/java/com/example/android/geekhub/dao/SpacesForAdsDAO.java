@@ -7,21 +7,17 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.example.android.geekhub.entities.Ad;
+import com.example.android.geekhub.db.DBHelper;
 import com.example.android.geekhub.entities.SpaceForAds;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SpacesForAdsDAO {
+public class SpacesForAdsDAO extends BaseDAO {
 
     public static final String TAG = "SpacesForAdsDAO";
 
-    private Context mContext;
-
     // Database fields
-    private SQLiteDatabase mDatabase;
-    private DBHelper mDbHelper;
     private String[] mAllColumns = {
             DBHelper.COLUMN_SPACES_FOR_ADS_SHOP_ID,
             DBHelper.COLUMN_SPACES_FOR_ADS_DIMENSION_ID,
@@ -29,23 +25,7 @@ public class SpacesForAdsDAO {
             DBHelper.COLUMN_SPACES_FOR_ADS_QUANTITY};
 
     public SpacesForAdsDAO(Context context) {
-        mDbHelper = new DBHelper(context);
-        this.mContext = context;
-        // open the database
-        try {
-            open();
-        } catch (SQLException e) {
-            Log.e(TAG, "SQLException on opening database " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
-    public void open() throws SQLException {
-        mDatabase = mDbHelper.getWritableDatabase();
-    }
-
-    public void close() {
-        mDbHelper.close();
+        super(context);
     }
 
     public Boolean createSpaceForAd(Long idShop, Long idDimension, Long idSpaceType, Long quantity) {

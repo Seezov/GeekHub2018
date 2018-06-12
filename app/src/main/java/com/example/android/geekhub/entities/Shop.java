@@ -1,9 +1,5 @@
 package com.example.android.geekhub.entities;
 
-import com.example.android.geekhub.enums.DimensionType;
-
-import java.util.List;
-
 public class Shop {
 
     private Long id;

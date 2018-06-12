@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.geekhub.R;
+import com.example.android.geekhub.dao.AdsInShopsDAO;
 import com.example.android.geekhub.dao.ShopDAO;
 import com.example.android.geekhub.dao.SpacesForAdsDAO;
 import com.example.android.geekhub.entities.Shop;
@@ -28,12 +29,14 @@ public class ShopAdapter extends RecyclerView.Adapter<ShopAdapter.FestivalViewHo
     private Context context;
     private List<Shop> shops;
     private SpacesForAdsDAO mSpacesForAdsDAO;
+    private AdsInShopsDAO mAdsInShopsDAO;
     private static RecyclerViewClickListener itemListener;
 
-    public ShopAdapter(Context context, List<Shop> shops, RecyclerViewClickListener itemListener, SpacesForAdsDAO mSpacesForAdsDAO) {
+    public ShopAdapter(Context context, List<Shop> shops, RecyclerViewClickListener itemListener, SpacesForAdsDAO mSpacesForAdsDAO, AdsInShopsDAO mAdsInShopsDAO) {
         this.context = context;
         this.shops = shops;
         this.mSpacesForAdsDAO = mSpacesForAdsDAO;
+        this.mAdsInShopsDAO = mAdsInShopsDAO;
         ShopAdapter.itemListener = itemListener;
     }
 
@@ -49,7 +52,7 @@ public class ShopAdapter extends RecyclerView.Adapter<ShopAdapter.FestivalViewHo
         Shop shop = shops.get(position);
         holder.getTxtTitle().setText(shop.getName().toUpperCase());
         // TODO: HANDLE THIS TWO VALUES
-        holder.getTxtNumberOfAds().setText(String.valueOf(0));
+        holder.getTxtNumberOfAds().setText(String.valueOf(mAdsInShopsDAO.getNumberOfAdsInShop(shop.getId())));
         holder.getTxtSpaceForAds().setText(String.valueOf(mSpacesForAdsDAO.getNumberOfSpacesInShop(shop.getId())));
     }
 

@@ -7,20 +7,17 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.example.android.geekhub.db.DBHelper;
 import com.example.android.geekhub.entities.Ad;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdDAO {
+public class AdDAO extends BaseDAO {
 
     public static final String TAG = "AdDAO";
 
-    private Context mContext;
-
     // Database fields
-    private SQLiteDatabase mDatabase;
-    private DBHelper mDbHelper;
     private String[] mAllColumns = {
             DBHelper.COLUMN_AD_ID,
             DBHelper.COLUMN_AD_DATE_START,
@@ -28,23 +25,7 @@ public class AdDAO {
             DBHelper.COLUMN_AD_NAME};
 
     public AdDAO(Context context) {
-        mDbHelper = new DBHelper(context);
-        this.mContext = context;
-        // open the database
-        try {
-            open();
-        } catch (SQLException e) {
-            Log.e(TAG, "SQLException on opening database " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
-    public void open() throws SQLException {
-        mDatabase = mDbHelper.getWritableDatabase();
-    }
-
-    public void close() {
-        mDbHelper.close();
+        super(context);
     }
 
     public Ad createAd(Long dateStart, Long dateEnd, String name) {

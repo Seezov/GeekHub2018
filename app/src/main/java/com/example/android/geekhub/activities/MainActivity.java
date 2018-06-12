@@ -22,7 +22,11 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.android.geekhub.R;
 import com.example.android.geekhub.adapters.ShopAdapter;
 import com.example.android.geekhub.dao.AdDAO;
+import com.example.android.geekhub.dao.AdsInShopsDAO;
+import com.example.android.geekhub.dao.DesignDAO;
 import com.example.android.geekhub.dao.DimensionDAO;
+import com.example.android.geekhub.dao.MaterialDAO;
+import com.example.android.geekhub.dao.OrderDAO;
 import com.example.android.geekhub.dao.ShopDAO;
 import com.example.android.geekhub.dao.SpaceDAO;
 import com.example.android.geekhub.dao.SpacesForAdsDAO;
@@ -60,6 +64,10 @@ public class MainActivity extends AppCompatActivity
     private DimensionDAO mDimensionDAO;
     private SpaceDAO mSpaceDAO;
     private SpacesForAdsDAO mSpacesForAdsDAO;
+    private AdsInShopsDAO mAdsInShopsDAO;
+    private OrderDAO mOrderDAO;
+    private MaterialDAO mMaterialDAO;
+    private DesignDAO mDesignDAO;
 /*    @BindView(R.id.recycler_view_bands)
     RecyclerView recyclerViewAds;*/
 
@@ -81,6 +89,10 @@ public class MainActivity extends AppCompatActivity
         mDimensionDAO = new DimensionDAO(this);
         mSpaceDAO = new SpaceDAO(this);
         mSpacesForAdsDAO = new SpacesForAdsDAO(this);
+        mAdsInShopsDAO = new AdsInShopsDAO(this);
+        mOrderDAO = new OrderDAO(this);
+        mMaterialDAO = new MaterialDAO(this);
+        mDesignDAO = new DesignDAO(this);
         shops = mShopDao.getAllShops();
         if (shops != null && !shops.isEmpty()) {
             setupRecyclerShops();
@@ -221,10 +233,9 @@ public class MainActivity extends AppCompatActivity
     private void setupContentShops() {
         shops.clear();
 
+        // TEST SHOPS
         mShopDao.createShop("SILPO");
         mShopDao.createShop("ATB");
-
-
 
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, 2018);
@@ -236,18 +247,35 @@ public class MainActivity extends AppCompatActivity
         cal.set(Calendar.DAY_OF_MONTH, 3);
         Date endDate1 = cal.getTime();
 
+        // TEST ADDS
         mAdDao.createAd(startDate1.getTime(), endDate1.getTime(), "FOTIUS");
         mAdDao.createAd(startDate1.getTime(), endDate1.getTime(), "SKIDKA NA SHAMPYN");
 
+        // TEST DIMENTIONS
         mDimensionDAO.createDimension(DimensionType.LARGE);
         mDimensionDAO.createDimension(DimensionType.SMALL);
 
+        // TEST SPACE TYPES
         mSpaceDAO.createSpace(SpaceType.WALL);
         mSpaceDAO.createSpace(SpaceType.STAND);
 
-        mSpacesForAdsDAO.createSpaceForAd(1L,1L,1L,1L);
-        mSpacesForAdsDAO.createSpaceForAd(1L,1L,2L,1L);
-        mSpacesForAdsDAO.createSpaceForAd(1L,2L,1L,1L);
+        // TEST DESIGNS
+        mDesignDAO.createDesign(1L, 1L, DesignType.EXPENSIVE, 100L);
+        mDesignDAO.createDesign(2L, 1L, DesignType.CHEAP, 50L);
+
+        // TEST MATERIALS
+        mMaterialDAO.createMaterial(MaterialType.PAPER);
+        mMaterialDAO.createMaterial(MaterialType.METAL);
+
+        // TEST SPACES
+        mSpacesForAdsDAO.createSpaceForAd(1L, 1L, 1L, 1L);
+        mSpacesForAdsDAO.createSpaceForAd(1L, 1L, 2L, 1L);
+        mSpacesForAdsDAO.createSpaceForAd(1L, 2L, 1L, 1L);
+
+        // TEST ORDERS
+        mOrderDAO.createOrder(1L,1L,1L,1L,1L,1L,200L,400L);
+        mOrderDAO.createOrder(2L,1L,2L,2L,2L,1L,400L,600L);
+
         //Dimension.LARGE, MaterialType.PAPER, DesignType.EXPENSIVE)
         //Dimension.LARGE, MaterialType.METAL, DesignType.EXPENSIVE)
 
@@ -294,7 +322,7 @@ public class MainActivity extends AppCompatActivity
 
     private void setupRecyclerShops() {
         ((TextView) actionBar.getCustomView().findViewById(R.id.txt_title)).setText("Shops List");
-        ShopAdapter mAdapter = new ShopAdapter(this, shops, this, mSpacesForAdsDAO);
+        ShopAdapter mAdapter = new ShopAdapter(this, shops, this, mSpacesForAdsDAO, mAdsInShopsDAO);
         recyclerViewShops.setAdapter(mAdapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerViewShops.setLayoutManager(layoutManager);
