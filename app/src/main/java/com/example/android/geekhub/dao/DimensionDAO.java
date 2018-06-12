@@ -7,24 +7,24 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.example.android.geekhub.entities.Shop;
+import com.example.android.geekhub.entities.Dimension;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShopDAO {
+public class DimensionDAO {
 
-    public static final String TAG = "ShopDAO";
+    public static final String TAG = "DimensionDAO";
 
     // Database fields
     private SQLiteDatabase mDatabase;
     private DBHelper mDbHelper;
     private Context mContext;
     private String[] mAllColumns = {
-            DBHelper.COLUMN_SHOP_ID,
-            DBHelper.COLUMN_SHOP_NAME};
+            DBHelper.COLUMN_DIMENSION_ID,
+            DBHelper.COLUMN_DIMENSION_NAME};
 
-    public ShopDAO(Context context) {
+    public DimensionDAO(Context context) {
         this.mContext = context;
         mDbHelper = new DBHelper(context);
         // open the database
@@ -44,24 +44,24 @@ public class ShopDAO {
         mDbHelper.close();
     }
 
-    public Shop createShop(String name) {
+    public Dimension createDimension(String name) {
         ContentValues values = new ContentValues();
-        values.put(DBHelper.COLUMN_SHOP_NAME, name);
+        values.put(DBHelper.COLUMN_DIMENSION_NAME, name);
         long insertId = mDatabase
-                .insert(DBHelper.TABLE_SHOPS, null, values);
-        Cursor cursor = mDatabase.query(DBHelper.TABLE_SHOPS, mAllColumns,
-                DBHelper.COLUMN_SHOP_ID + " = " + insertId, null, null,
+                .insert(DBHelper.TABLE_DIMENSIONS, null, values);
+        Cursor cursor = mDatabase.query(DBHelper.TABLE_DIMENSIONS, mAllColumns,
+                DBHelper.COLUMN_DIMENSION_ID + " = " + insertId, null, null,
                 null, null);
         cursor.moveToFirst();
-        Shop newShop = cursorToShop(cursor);
+        Dimension newDimension = cursorToDimension(cursor);
         cursor.close();
-        return newShop;
+        return newDimension;
     }
 
-    public Boolean updateShop(Long id, String name) {
+    public Boolean updateDimension(Long id, String name) {
         ContentValues values = new ContentValues();
         values.put(DBHelper.COLUMN_SHOP_NAME, name);
-        int result = mDatabase.update(DBHelper.TABLE_SHOPS, values, DBHelper.COLUMN_SHOP_ID + id, null);
+        int result = mDatabase.update(DBHelper.TABLE_DIMENSIONS, values, DBHelper.COLUMN_DIMENSION_ID + id, null);
         return result > 0;
     }
 
@@ -81,40 +81,39 @@ public class ShopDAO {
                 + " = " + id, null);
     }*/
 
-    public List<Shop> getAllShops() {
-        List<Shop> listShops = new ArrayList<>();
+    public List<Dimension> getAllShops() {
+        List<Dimension> listDimensions = new ArrayList<>();
 
-        Cursor cursor = mDatabase.query(DBHelper.TABLE_SHOPS, mAllColumns,
+        Cursor cursor = mDatabase.query(DBHelper.TABLE_DIMENSIONS, mAllColumns,
                 null, null, null, null, null);
         if (cursor != null) {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
-                Shop shop = cursorToShop(cursor);
-                listShops.add(shop);
+                Dimension dimension = cursorToDimension(cursor);
+                listDimensions.add(dimension);
                 cursor.moveToNext();
             }
 
             // make sure to close the cursor
             cursor.close();
         }
-        return listShops;
+        return listDimensions;
     }
 
-    public Shop getShopById(long id) {
-        Cursor cursor = mDatabase.query(DBHelper.TABLE_SHOPS, mAllColumns,
-                DBHelper.COLUMN_SHOP_ID + " = ?",
+    public Dimension getDimensionById(long id) {
+        Cursor cursor = mDatabase.query(DBHelper.TABLE_DIMENSIONS, mAllColumns,
+                DBHelper.COLUMN_DIMENSION_ID + " = ?",
                 new String[]{String.valueOf(id)}, null, null, null);
         if (cursor != null) {
             cursor.moveToFirst();
         }
-
-        return cursorToShop(cursor);
+        return cursorToDimension(cursor);
     }
 
-    protected Shop cursorToShop(Cursor cursor) {
-        Shop shop = new Shop();
-        shop.setId(cursor.getLong(0));
-        shop.setName(cursor.getString(1));
-        return shop;
+    protected Dimension cursorToDimension(Cursor cursor) {
+        Dimension dimension = new Dimension();
+        dimension.setId(cursor.getLong(0));
+        dimension.setName(cursor.getString(1));
+        return dimension;
     }
 }

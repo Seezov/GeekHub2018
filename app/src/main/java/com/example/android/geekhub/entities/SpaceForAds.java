@@ -3,63 +3,48 @@ package com.example.android.geekhub.entities;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.example.android.geekhub.enums.Dimension;
+import com.example.android.geekhub.enums.DimensionType;
 import com.example.android.geekhub.enums.SpaceType;
 
-public class SpaceForAds implements Parcelable {
+public class SpaceForAds {
 
-    @SpaceType
-    private String spaceType;
-    @Dimension
-    private String dimension;
+    private Long idShop;
+    private Long idDimension;
+    private Long idSpaceType;
+    private Long quantity;
 
-    public SpaceForAds(String spaceType, String dimension) {
-        this.spaceType = spaceType;
-        this.dimension = dimension;
+    public SpaceForAds() {
     }
 
-    public String getSpaceType() {
-        return spaceType;
+    public Long getIdShop() {
+        return idShop;
     }
 
-    public void setSpaceType(String spaceType) {
-        this.spaceType = spaceType;
+    public void setIdShop(Long idShop) {
+        this.idShop = idShop;
     }
 
-    public String getDimension() {
-        return dimension;
+    public Long getIdDimension() {
+        return idDimension;
     }
 
-    public void setDimension(String dimension) {
-        this.dimension = dimension;
+    public void setIdDimension(Long idDimension) {
+        this.idDimension = idDimension;
     }
 
-
-    @Override
-    public int describeContents() {
-        return 0;
+    public Long getIdSpaceType() {
+        return idSpaceType;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.spaceType);
-        dest.writeString(this.dimension);
+    public void setIdSpaceType(Long idSpaceType) {
+        this.idSpaceType = idSpaceType;
     }
 
-    protected SpaceForAds(Parcel in) {
-        this.spaceType = in.readString();
-        this.dimension = in.readString();
+    public Long getQuantity() {
+        return quantity;
     }
 
-    public static final Creator<SpaceForAds> CREATOR = new Creator<SpaceForAds>() {
-        @Override
-        public SpaceForAds createFromParcel(Parcel source) {
-            return new SpaceForAds(source);
-        }
-
-        @Override
-        public SpaceForAds[] newArray(int size) {
-            return new SpaceForAds[size];
-        }
-    };
+    public void setQuantity(Long quantity) {
+        this.quantity = quantity;
+    }
 }

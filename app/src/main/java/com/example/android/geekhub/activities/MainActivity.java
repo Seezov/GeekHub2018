@@ -1,6 +1,5 @@
 package com.example.android.geekhub.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -22,12 +21,16 @@ import android.widget.ViewFlipper;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.android.geekhub.R;
 import com.example.android.geekhub.adapters.ShopAdapter;
+import com.example.android.geekhub.dao.AdDAO;
+import com.example.android.geekhub.dao.DimensionDAO;
 import com.example.android.geekhub.dao.ShopDAO;
+import com.example.android.geekhub.dao.SpaceDAO;
+import com.example.android.geekhub.dao.SpacesForAdsDAO;
 import com.example.android.geekhub.entities.Ad;
 import com.example.android.geekhub.entities.Shop;
 import com.example.android.geekhub.entities.SpaceForAds;
 import com.example.android.geekhub.enums.DesignType;
-import com.example.android.geekhub.enums.Dimension;
+import com.example.android.geekhub.enums.DimensionType;
 import com.example.android.geekhub.enums.MaterialType;
 import com.example.android.geekhub.enums.SpaceType;
 import com.example.android.geekhub.listeners.RecyclerViewClickListener;
@@ -53,6 +56,10 @@ public class MainActivity extends AppCompatActivity
     @BindView(R.id.recycler_view_shops)
     RecyclerView recyclerViewShops;
     private ShopDAO mShopDao;
+    private AdDAO mAdDao;
+    private DimensionDAO mDimensionDAO;
+    private SpaceDAO mSpaceDAO;
+    private SpacesForAdsDAO mSpacesForAdsDAO;
 /*    @BindView(R.id.recycler_view_bands)
     RecyclerView recyclerViewAds;*/
 
@@ -70,15 +77,18 @@ public class MainActivity extends AppCompatActivity
         setupDrawer();
         // fill the listView
         mShopDao = new ShopDAO(this);
+        mAdDao = new AdDAO(this);
+        mDimensionDAO = new DimensionDAO(this);
+        mSpaceDAO = new SpaceDAO(this);
+        mSpacesForAdsDAO = new SpacesForAdsDAO(this);
         shops = mShopDao.getAllShops();
         if (shops != null && !shops.isEmpty()) {
             setupRecyclerShops();
         } else {
-            mShopDao.createShop("SILPO");
-            mShopDao.createShop("ATB");
+            setupContentShops();
         }
 
-        //setupContentFestivals();
+        //setupContentShops();
 
         findViewById(R.id.img_help).setOnClickListener(view -> {
             switch (viewFlipper.getDisplayedChild()) {
@@ -145,7 +155,7 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_shop_list) {
             viewFlipper.setDisplayedChild(0);
-            setupContentFestivals();
+            setupContentShops();
         } else if (id == R.id.nav_add_ad) {
             new MaterialDialog.Builder(this)
                     .title("ADMIN FUNCTION")
@@ -208,9 +218,14 @@ public class MainActivity extends AppCompatActivity
         return allAds;
     }*/
 
-    private void setupContentFestivals() {
-        // TODO: LOAD FESTS AND BANDS FROM DB
+    private void setupContentShops() {
         shops.clear();
+
+        mShopDao.createShop("SILPO");
+        mShopDao.createShop("ATB");
+
+
+
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, 2018);
         cal.set(Calendar.MONTH, Calendar.MAY);
@@ -221,16 +236,24 @@ public class MainActivity extends AppCompatActivity
         cal.set(Calendar.DAY_OF_MONTH, 3);
         Date endDate1 = cal.getTime();
 
-        List<Ad> addsSilpo = Arrays.asList(
-                new Ad("FOTIUS", startDate1, endDate1, Dimension.LARGE, MaterialType.PAPER, DesignType.EXPENSIVE),
-                new Ad("SKIDKA NA SHAMPYN", startDate1, endDate1, Dimension.LARGE, MaterialType.METAL, DesignType.EXPENSIVE)
-        );
+        mAdDao.createAd(startDate1.getTime(), endDate1.getTime(), "FOTIUS");
+        mAdDao.createAd(startDate1.getTime(), endDate1.getTime(), "SKIDKA NA SHAMPYN");
 
-        List<SpaceForAds> spaceForAdsSilpo = Arrays.asList(
-                new SpaceForAds(SpaceType.WALL, Dimension.LARGE),
-                new SpaceForAds(SpaceType.STAND, Dimension.LARGE),
-                new SpaceForAds(SpaceType.WALL, Dimension.SMALL)
-        );
+        mDimensionDAO.createDimension(DimensionType.LARGE);
+        mDimensionDAO.createDimension(DimensionType.SMALL);
+
+        mSpaceDAO.createSpace(SpaceType.WALL);
+        mSpaceDAO.createSpace(SpaceType.STAND);
+
+        mSpacesForAdsDAO.createSpaceForAd(1L,1L,1L,1L);
+        mSpacesForAdsDAO.createSpaceForAd(1L,1L,2L,1L);
+        mSpacesForAdsDAO.createSpaceForAd(1L,2L,1L,1L);
+        //Dimension.LARGE, MaterialType.PAPER, DesignType.EXPENSIVE)
+        //Dimension.LARGE, MaterialType.METAL, DesignType.EXPENSIVE)
+
+
+        List<Ad> addsSilpo = mAdDao.getAllAds();
+
 
         cal.set(Calendar.YEAR, 2018);
         cal.set(Calendar.MONTH, Calendar.MAY);
@@ -251,27 +274,27 @@ public class MainActivity extends AppCompatActivity
         Date endDate3 = cal.getTime();
 
         List<Ad> addsAtb = Arrays.asList(
-                new Ad("FOTIUS", startDate1, endDate1, Dimension.SMALL, MaterialType.PAPER, DesignType.CHEAP),
-                new Ad("SKIDKA NA OCHKI", startDate2, endDate2, Dimension.SMALL, MaterialType.METAL, DesignType.EXPENSIVE),
-                new Ad("Summer festival ad", startDate2, endDate2, Dimension.SMALL, MaterialType.PAPER, DesignType.CHEAP),
-                new Ad("NEW iPHONE", startDate3, endDate3, Dimension.SMALL, MaterialType.METAL, DesignType.CHEAP)
+                new Ad("FOTIUS", startDate1, endDate1, DimensionType.SMALL, MaterialType.PAPER, DesignType.CHEAP),
+                new Ad("SKIDKA NA OCHKI", startDate2, endDate2, DimensionType.SMALL, MaterialType.METAL, DesignType.EXPENSIVE),
+                new Ad("Summer festival ad", startDate2, endDate2, DimensionType.SMALL, MaterialType.PAPER, DesignType.CHEAP),
+                new Ad("NEW iPHONE", startDate3, endDate3, DimensionType.SMALL, MaterialType.METAL, DesignType.CHEAP)
         );
-        List<SpaceForAds> spacesForAdsAtb = Arrays.asList(
-                new SpaceForAds(SpaceType.WALL, Dimension.SMALL),
-                new SpaceForAds(SpaceType.WALL, Dimension.SMALL),
-                new SpaceForAds(SpaceType.WALL, Dimension.SMALL)
+/*        List<SpaceForAds> spacesForAdsAtb = Arrays.asList(
+                new SpaceForAds(SpaceType.WALL, DimensionType.SMALL),
+                new SpaceForAds(SpaceType.WALL, DimensionType.SMALL),
+                new SpaceForAds(SpaceType.WALL, DimensionType.SMALL)
         );
 
         shops.addAll(Arrays.asList(
                 new Shop("Silpo", addsSilpo, spaceForAdsSilpo),
                 new Shop("ATB", addsAtb, spacesForAdsAtb)
-        ));
+        ));*/
         setupRecyclerShops();
     }
 
     private void setupRecyclerShops() {
         ((TextView) actionBar.getCustomView().findViewById(R.id.txt_title)).setText("Shops List");
-        ShopAdapter mAdapter = new ShopAdapter(this, shops, this);
+        ShopAdapter mAdapter = new ShopAdapter(this, shops, this, mSpacesForAdsDAO);
         recyclerViewShops.setAdapter(mAdapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerViewShops.setLayoutManager(layoutManager);

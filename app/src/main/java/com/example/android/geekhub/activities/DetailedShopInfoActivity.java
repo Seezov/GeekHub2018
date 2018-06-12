@@ -66,20 +66,20 @@ public class DetailedShopInfoActivity extends AppCompatActivity {
 
     private void setupContent() {
         ((TextView) actionBar.getCustomView().findViewById(R.id.txt_title)).setText(shop.getName());
-        txtNumOfAds.setText(String.valueOf(shop.getAds().size()));
-        txtSpaces.setText(shop.getSpacesString());
+/*        txtNumOfAds.setText(String.valueOf(shop.getAds().size()));
+        txtSpaces.setText(shop.getSpacesString());*/
         setupRecycler();
     }
 
     private void setupRecycler() {
-        AdAdapter mAdapter = new AdAdapter(this, shop.getAds());
+        /*AdAdapter mAdapter = new AdAdapter(this, shop.getAds());
         recyclerViewAds.setAdapter(mAdapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerViewAds.setLayoutManager(layoutManager);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerViewAds.getContext(),
                 layoutManager.getOrientation());
         recyclerViewAds.addItemDecoration(dividerItemDecoration);
-        mAdapter.notifyDataSetChanged();
+        mAdapter.notifyDataSetChanged();*/
     }
 
     @Override

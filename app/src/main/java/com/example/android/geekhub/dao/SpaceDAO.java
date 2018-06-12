@@ -7,24 +7,25 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.example.android.geekhub.entities.Shop;
+import com.example.android.geekhub.entities.Dimension;
+import com.example.android.geekhub.entities.Space;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShopDAO {
+public class SpaceDAO {
 
-    public static final String TAG = "ShopDAO";
+    public static final String TAG = "SpaceDAO";
 
     // Database fields
     private SQLiteDatabase mDatabase;
     private DBHelper mDbHelper;
     private Context mContext;
     private String[] mAllColumns = {
-            DBHelper.COLUMN_SHOP_ID,
-            DBHelper.COLUMN_SHOP_NAME};
+            DBHelper.COLUMN_SPACE_TYPE_ID,
+            DBHelper.COLUMN_SPACE_TYPE_NAME};
 
-    public ShopDAO(Context context) {
+    public SpaceDAO(Context context) {
         this.mContext = context;
         mDbHelper = new DBHelper(context);
         // open the database
@@ -44,24 +45,24 @@ public class ShopDAO {
         mDbHelper.close();
     }
 
-    public Shop createShop(String name) {
+    public Space createSpace(String name) {
         ContentValues values = new ContentValues();
-        values.put(DBHelper.COLUMN_SHOP_NAME, name);
+        values.put(DBHelper.COLUMN_SPACE_TYPE_NAME, name);
         long insertId = mDatabase
-                .insert(DBHelper.TABLE_SHOPS, null, values);
-        Cursor cursor = mDatabase.query(DBHelper.TABLE_SHOPS, mAllColumns,
-                DBHelper.COLUMN_SHOP_ID + " = " + insertId, null, null,
+                .insert(DBHelper.TABLE_SPACE_TYPES, null, values);
+        Cursor cursor = mDatabase.query(DBHelper.TABLE_SPACE_TYPES, mAllColumns,
+                DBHelper.COLUMN_SPACE_TYPE_ID + " = " + insertId, null, null,
                 null, null);
         cursor.moveToFirst();
-        Shop newShop = cursorToShop(cursor);
+        Space newSpace = cursorToSpace(cursor);
         cursor.close();
-        return newShop;
+        return newSpace;
     }
 
-    public Boolean updateShop(Long id, String name) {
+    public Boolean updateSpace(Long id, String name) {
         ContentValues values = new ContentValues();
-        values.put(DBHelper.COLUMN_SHOP_NAME, name);
-        int result = mDatabase.update(DBHelper.TABLE_SHOPS, values, DBHelper.COLUMN_SHOP_ID + id, null);
+        values.put(DBHelper.COLUMN_SPACE_TYPE_NAME, name);
+        int result = mDatabase.update(DBHelper.TABLE_SPACE_TYPES, values, DBHelper.COLUMN_SPACE_TYPE_ID + id, null);
         return result > 0;
     }
 
@@ -81,40 +82,39 @@ public class ShopDAO {
                 + " = " + id, null);
     }*/
 
-    public List<Shop> getAllShops() {
-        List<Shop> listShops = new ArrayList<>();
+    public List<Space> getAllSpaces() {
+        List<Space> listSpaces = new ArrayList<>();
 
-        Cursor cursor = mDatabase.query(DBHelper.TABLE_SHOPS, mAllColumns,
+        Cursor cursor = mDatabase.query(DBHelper.TABLE_SPACE_TYPES, mAllColumns,
                 null, null, null, null, null);
         if (cursor != null) {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
-                Shop shop = cursorToShop(cursor);
-                listShops.add(shop);
+                Space space = cursorToSpace(cursor);
+                listSpaces.add(space);
                 cursor.moveToNext();
             }
 
             // make sure to close the cursor
             cursor.close();
         }
-        return listShops;
+        return listSpaces;
     }
 
-    public Shop getShopById(long id) {
-        Cursor cursor = mDatabase.query(DBHelper.TABLE_SHOPS, mAllColumns,
-                DBHelper.COLUMN_SHOP_ID + " = ?",
+    public Space getSpaceById(long id) {
+        Cursor cursor = mDatabase.query(DBHelper.TABLE_SPACE_TYPES, mAllColumns,
+                DBHelper.COLUMN_SPACE_TYPE_ID + " = ?",
                 new String[]{String.valueOf(id)}, null, null, null);
         if (cursor != null) {
             cursor.moveToFirst();
         }
-
-        return cursorToShop(cursor);
+        return cursorToSpace(cursor);
     }
 
-    protected Shop cursorToShop(Cursor cursor) {
-        Shop shop = new Shop();
-        shop.setId(cursor.getLong(0));
-        shop.setName(cursor.getString(1));
-        return shop;
+    protected Space cursorToSpace(Cursor cursor) {
+        Space space = new Space();
+        space.setId(cursor.getLong(0));
+        space.setName(cursor.getString(1));
+        return space;
     }
 }

@@ -1,27 +1,29 @@
 package com.example.android.geekhub.entities;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.example.android.geekhub.enums.DesignType;
-import com.example.android.geekhub.enums.Dimension;
+import com.example.android.geekhub.enums.DimensionType;
 import com.example.android.geekhub.enums.MaterialType;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Ad implements Parcelable {
+public class Ad {
 
+    private long id;
     private String name;
     private Date startDate;
     private Date endDate;
-    @Dimension
+    @DimensionType
     private String dimension;
     @MaterialType
     private String material;
     @DesignType
     private String designType;
+
+    public Ad () {
+
+    }
 
     public Ad(String name, Date startDate, Date endDate, String dimension, String material, String design) {
         this.name = name;
@@ -44,16 +46,16 @@ public class Ad implements Parcelable {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
+    public void setStartDate(Long startDate) {
+        this.startDate = new Date(startDate);
     }
 
     public Date getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
+    public void setEndDate(Long endDate) {
+        this.endDate = new Date(endDate);
     }
 
     public String getDimension() {
@@ -89,42 +91,11 @@ public class Ad implements Parcelable {
         return "Design is " + designType + " and " + dimension;
     }
 
-
-    @Override
-    public int describeContents() {
-        return 0;
+    public long getId() {
+        return id;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.name);
-        dest.writeLong(this.startDate != null ? this.startDate.getTime() : -1);
-        dest.writeLong(this.endDate != null ? this.endDate.getTime() : -1);
-        dest.writeString(this.dimension);
-        dest.writeString(this.material);
-        dest.writeString(this.designType);
+    public void setId(long id) {
+        this.id = id;
     }
-
-    protected Ad(Parcel in) {
-        this.name = in.readString();
-        long tmpStartDate = in.readLong();
-        this.startDate = tmpStartDate == -1 ? null : new Date(tmpStartDate);
-        long tmpEndDate = in.readLong();
-        this.endDate = tmpEndDate == -1 ? null : new Date(tmpEndDate);
-        this.dimension = in.readString();
-        this.material = in.readString();
-        this.designType = in.readString();
-    }
-
-    public static final Creator<Ad> CREATOR = new Creator<Ad>() {
-        @Override
-        public Ad createFromParcel(Parcel source) {
-            return new Ad(source);
-        }
-
-        @Override
-        public Ad[] newArray(int size) {
-            return new Ad[size];
-        }
-    };
 }
