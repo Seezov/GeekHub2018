@@ -8,11 +8,15 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.example.android.geekhub.db.DBHelper;
+import com.example.android.geekhub.entities.Ad;
+import com.example.android.geekhub.entities.SpaceForAds;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AdsInShopsDAO extends BaseDAO {
 
     public static final String TAG = "AdsInShopsDAO";
-
 
     // Database fields
     private String[] mAllColumns = {
@@ -41,15 +45,26 @@ public class AdsInShopsDAO extends BaseDAO {
 
     // TODO: FIND BY ALL ID'S
     public int getNumberOfAdsInShop(long idShop) {
-        int result = 0;
+        return geAdsInShop(idShop).size();
+    }
+
+    public List<Ad> geAdsInShop(long idShop) {
+        List<Ad> listAds = new ArrayList<>();
+
         Cursor cursor = mDatabase.query(DBHelper.TABLE_ADS_IN_SHOPS, mAllColumns,
                 DBHelper.COLUMN_ADS_IN_SHOPS_SHOP_ID + " = ?",
                 new String[]{String.valueOf(idShop)}, null, null, null);
-        if (cursor != null) {
-            result = cursor.getCount();
-            cursor.close();
+
+        cursor.moveToFirst();
+        AdDAO mAdDAO = new AdDAO(mContext);
+        while (!cursor.isAfterLast()) {
+            Ad ad = mAdDAO.getAdById(cursor.getLong(0));
+            listAds.add(ad);
+            cursor.moveToNext();
         }
-        return result;
+        // make sure to close the cursor
+        cursor.close();
+        return listAds;
     }
 
     public int getNumberOfShopWithAd(long idAd) {

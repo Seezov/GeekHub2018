@@ -1,11 +1,11 @@
 package com.example.android.geekhub.entities;
 
+import java.util.List;
+
 public class Shop {
 
     private Long id;
     private String name;
-    //private List<Ad> ads;
-    //private List<SpaceForAds> spacesForAds;
 
     public Shop (){
 

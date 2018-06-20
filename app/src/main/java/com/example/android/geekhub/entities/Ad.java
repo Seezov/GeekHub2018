@@ -11,27 +11,18 @@ import java.util.Date;
 public class Ad {
 
     private long id;
-    private String name;
     private Date startDate;
     private Date endDate;
-    @DimensionType
-    private String dimension;
-    @MaterialType
-    private String material;
-    @DesignType
-    private String designType;
+    private String name;
 
     public Ad () {
 
     }
 
-    public Ad(String name, Date startDate, Date endDate, String dimension, String material, String design) {
+    public Ad(String name, Date startDate, Date endDate) {
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.dimension = dimension;
-        this.material = material;
-        this.designType = design;
     }
 
     public String getName() {
@@ -56,39 +47,6 @@ public class Ad {
 
     public void setEndDate(Long endDate) {
         this.endDate = new Date(endDate);
-    }
-
-    public String getDimension() {
-        return dimension;
-    }
-
-    public void setDimension(String dimension) {
-        this.dimension = dimension;
-    }
-
-    public String getMaterial() {
-        return material;
-    }
-
-    public void setMaterial(String material) {
-        this.material = material;
-    }
-
-    public String getDesignType() {
-        return designType;
-    }
-
-    public void setDesignType(String designType) {
-        this.designType = designType;
-    }
-
-    public String getDateString() {
-        DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
-        return df.format(startDate) + " - " + df.format(endDate);
-    }
-
-    public String getDesignString() {
-        return "Design is " + designType + " and " + dimension;
     }
 
     public long getId() {

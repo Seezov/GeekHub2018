@@ -62,17 +62,20 @@ public class SpacesForAdsDAO extends BaseDAO {
         cursor.close();
         return listSpacesForAds;
     }
+
     // TODO: FIND BY ALL ID'S
-    public int getNumberOfSpacesInShop(long idShop) {
-        int result = 0;
+    public List<SpaceForAds> getSpacesInShop(long idShop) {
+        List<SpaceForAds> listSpacesForAds = new ArrayList<>();
         Cursor cursor = mDatabase.query(DBHelper.TABLE_SPACES_FOR_ADS, mAllColumns,
                 DBHelper.COLUMN_SPACES_FOR_ADS_SHOP_ID + " = ?",
                 new String[]{String.valueOf(idShop)}, null, null, null);
-        if (cursor != null) {
-            result = cursor.getCount();
-            cursor.close();
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            SpaceForAds spaceForAds = cursorToAd(cursor);
+            listSpacesForAds.add(spaceForAds);
+            cursor.moveToNext();
         }
-        return result;
+        return listSpacesForAds;
     }
 
     protected SpaceForAds cursorToAd(Cursor cursor) {

@@ -18,7 +18,7 @@ public class OrderDAO extends BaseDAO {
     private String[] mAllColumns = {
             DBHelper.COLUMN_ORDER_AD_ID,
             DBHelper.COLUMN_ORDER_SHOP_ID,
-            DBHelper.COLUMN_ORDER_MATERIAL_TYPE__ID,
+            DBHelper.COLUMN_ORDER_MATERIAL_TYPE_ID,
             DBHelper.COLUMN_ORDER_DIMENSION_ID,
             DBHelper.COLUMN_ORDER_DESIGN_ID,
             DBHelper.COLUMN_ORDER_QUANTITY,
@@ -40,7 +40,7 @@ public class OrderDAO extends BaseDAO {
         ContentValues values = new ContentValues();
         values.put(DBHelper.COLUMN_ORDER_AD_ID, idAd);
         values.put(DBHelper.COLUMN_ORDER_SHOP_ID, idShop);
-        values.put(DBHelper.COLUMN_ORDER_MATERIAL_TYPE__ID, idMaterialType);
+        values.put(DBHelper.COLUMN_ORDER_MATERIAL_TYPE_ID, idMaterialType);
         values.put(DBHelper.COLUMN_ORDER_DIMENSION_ID, idDimension);
         values.put(DBHelper.COLUMN_ORDER_DESIGN_ID, idDesign);
         values.put(DBHelper.COLUMN_ORDER_QUANTITY, quantity);
@@ -67,7 +67,6 @@ public class OrderDAO extends BaseDAO {
 
     public List<Order> getAllOrders() {
         List<Order> listOrders = new ArrayList<>();
-
         Cursor cursor = mDatabase.query(DBHelper.TABLE_ORDERS, mAllColumns,
                 null, null, null, null, null);
 
@@ -93,5 +92,22 @@ public class OrderDAO extends BaseDAO {
         order.setMaterialPrice(cursor.getLong(6));
         order.setPrintPrice(cursor.getLong(7));
         return order;
+    }
+
+    public List<Order> getOrdersByAd(long idAd) {
+        List<Order> listOrders = new ArrayList<>();
+        Cursor cursor = mDatabase.query(DBHelper.TABLE_ORDERS, mAllColumns,
+                DBHelper.COLUMN_ORDER_AD_ID + " = ?",
+                new String[]{String.valueOf(idAd)}, null, null, null);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            Order order = cursorToOrder(cursor);
+            listOrders.add(order);
+            cursor.moveToNext();
+        }
+        // make sure to close the cursor
+        cursor.close();
+        return listOrders;
     }
 }

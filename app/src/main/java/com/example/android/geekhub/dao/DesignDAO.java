@@ -101,6 +101,16 @@ public class DesignDAO extends BaseDAO {
         return cursorToDesign(cursor);
     }
 
+    public Design getDesignByAd(long idAd) {
+        Cursor cursor = mDatabase.query(DBHelper.TABLE_DESIGNS, mAllColumns,
+                DBHelper.COLUMN_DESIGN_AD_ID + " = ?",
+                new String[]{String.valueOf(idAd)}, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+        return cursorToDesign(cursor);
+    }
+
     protected Design cursorToDesign(Cursor cursor) {
         Design newDesign = new Design();
         newDesign.setId(cursor.getLong(0));

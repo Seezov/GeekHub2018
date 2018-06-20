@@ -14,11 +14,20 @@ import android.widget.Toast;
 
 import com.example.android.geekhub.R;
 import com.example.android.geekhub.adapters.AdAdapter;
+import com.example.android.geekhub.dao.AdsInShopsDAO;
+import com.example.android.geekhub.dao.DimensionDAO;
+import com.example.android.geekhub.dao.ShopDAO;
+import com.example.android.geekhub.dao.SpacesForAdsDAO;
+import com.example.android.geekhub.db.DBHelper;
+import com.example.android.geekhub.entities.Dimension;
 import com.example.android.geekhub.entities.Shop;
+import com.example.android.geekhub.entities.SpaceForAds;
+import com.example.android.geekhub.enums.DimensionType;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,6 +43,10 @@ public class DetailedShopInfoActivity extends AppCompatActivity {
     @BindView(R.id.view_scroll)
     ScrollView viewScroll;
 
+    ShopDAO mShopDAO;
+    AdsInShopsDAO mAdsInShopsDAO;
+    SpacesForAdsDAO mSpacesForAdsDAO;
+    DimensionDAO mDimensionDAO;
     ActionBar actionBar;
     Shop shop;
 
@@ -43,9 +56,12 @@ public class DetailedShopInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detailed_shop_info);
         ButterKnife.bind(this);
         actionBar = getSupportActionBar();
-
+        mShopDAO = new ShopDAO(this);
+        mAdsInShopsDAO = new AdsInShopsDAO(this);
+        mSpacesForAdsDAO = new SpacesForAdsDAO(this);
+        mDimensionDAO = new DimensionDAO(this);
         Bundle data = getIntent().getExtras();
-        shop = data.getParcelable("shop");
+        shop = mShopDAO.getShopById(data.getLong(DBHelper.COLUMN_SHOP_ID));
 
         setupActionBar();
         setupContent();
@@ -66,25 +82,42 @@ public class DetailedShopInfoActivity extends AppCompatActivity {
 
     private void setupContent() {
         ((TextView) actionBar.getCustomView().findViewById(R.id.txt_title)).setText(shop.getName());
-/*        txtNumOfAds.setText(String.valueOf(shop.getAds().size()));
-        txtSpaces.setText(shop.getSpacesString());*/
+        txtNumOfAds.setText(String.valueOf(mAdsInShopsDAO.getNumberOfAdsInShop(shop.getId())));
+        txtSpaces.setText(getSpacesString(mSpacesForAdsDAO.getSpacesInShop(shop.getId())));
         setupRecycler();
     }
 
     private void setupRecycler() {
-        /*AdAdapter mAdapter = new AdAdapter(this, shop.getAds());
+        AdAdapter mAdapter = new AdAdapter(this, mAdsInShopsDAO.geAdsInShop(shop.getId()));
         recyclerViewAds.setAdapter(mAdapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerViewAds.setLayoutManager(layoutManager);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerViewAds.getContext(),
                 layoutManager.getOrientation());
         recyclerViewAds.addItemDecoration(dividerItemDecoration);
-        mAdapter.notifyDataSetChanged();*/
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         onBackPressed();
         return super.onOptionsItemSelected(item);
+    }
+
+    public String getSpacesString(List<SpaceForAds> spacesForAds) {
+        if (spacesForAds.isEmpty()) {
+            return "There are no spaces for ads";
+        }
+        int largeSpaces = 0;
+        int smallSpaces = 0;
+        for (SpaceForAds space: spacesForAds) {
+            String currentDimension = mDimensionDAO.getDimensionById(space.getIdDimension()).getName();
+            if (currentDimension.equals(DimensionType.LARGE) ){
+                largeSpaces++;
+            } else if (currentDimension.equals(DimensionType.SMALL)) {
+                smallSpaces++;
+            }
+        }
+        return "There are " + largeSpaces + " large spaces and " + smallSpaces + " small spaces.";
     }
 }

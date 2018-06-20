@@ -70,7 +70,7 @@ public class AdDAO extends BaseDAO {
 
     public Ad getAdById(long idAd) {
         Cursor cursor = mDatabase.query(DBHelper.TABLE_ADS, mAllColumns,
-                DBHelper.COLUMN_SHOP_ID + " = ?",
+                DBHelper.COLUMN_AD_ID + " = ?",
                 new String[]{String.valueOf(idAd)}, null, null, null);
         if (cursor != null) {
             cursor.moveToFirst();

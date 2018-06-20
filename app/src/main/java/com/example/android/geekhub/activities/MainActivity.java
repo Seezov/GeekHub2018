@@ -1,5 +1,6 @@
 package com.example.android.geekhub.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -30,6 +31,7 @@ import com.example.android.geekhub.dao.OrderDAO;
 import com.example.android.geekhub.dao.ShopDAO;
 import com.example.android.geekhub.dao.SpaceDAO;
 import com.example.android.geekhub.dao.SpacesForAdsDAO;
+import com.example.android.geekhub.db.DBHelper;
 import com.example.android.geekhub.entities.Ad;
 import com.example.android.geekhub.entities.Shop;
 import com.example.android.geekhub.entities.SpaceForAds;
@@ -251,7 +253,7 @@ public class MainActivity extends AppCompatActivity
         mAdDao.createAd(startDate1.getTime(), endDate1.getTime(), "FOTIUS");
         mAdDao.createAd(startDate1.getTime(), endDate1.getTime(), "SKIDKA NA SHAMPYN");
 
-        // TEST DIMENTIONS
+        // TEST DIMENSIONS
         mDimensionDAO.createDimension(DimensionType.LARGE);
         mDimensionDAO.createDimension(DimensionType.SMALL);
 
@@ -261,7 +263,7 @@ public class MainActivity extends AppCompatActivity
 
         // TEST DESIGNS
         mDesignDAO.createDesign(1L, 1L, DesignType.EXPENSIVE, 100L);
-        mDesignDAO.createDesign(2L, 1L, DesignType.CHEAP, 50L);
+        mDesignDAO.createDesign(2L, 2L, DesignType.CHEAP, 50L);
 
         // TEST MATERIALS
         mMaterialDAO.createMaterial(MaterialType.PAPER);
@@ -301,12 +303,12 @@ public class MainActivity extends AppCompatActivity
         cal.set(Calendar.DAY_OF_MONTH, 14);
         Date endDate3 = cal.getTime();
 
-        List<Ad> addsAtb = Arrays.asList(
+       /* List<Ad> addsAtb = Arrays.asList(
                 new Ad("FOTIUS", startDate1, endDate1, DimensionType.SMALL, MaterialType.PAPER, DesignType.CHEAP),
                 new Ad("SKIDKA NA OCHKI", startDate2, endDate2, DimensionType.SMALL, MaterialType.METAL, DesignType.EXPENSIVE),
                 new Ad("Summer festival ad", startDate2, endDate2, DimensionType.SMALL, MaterialType.PAPER, DesignType.CHEAP),
                 new Ad("NEW iPHONE", startDate3, endDate3, DimensionType.SMALL, MaterialType.METAL, DesignType.CHEAP)
-        );
+        );*/
 /*        List<SpaceForAds> spacesForAdsAtb = Arrays.asList(
                 new SpaceForAds(SpaceType.WALL, DimensionType.SMALL),
                 new SpaceForAds(SpaceType.WALL, DimensionType.SMALL),
@@ -322,7 +324,7 @@ public class MainActivity extends AppCompatActivity
 
     private void setupRecyclerShops() {
         ((TextView) actionBar.getCustomView().findViewById(R.id.txt_title)).setText("Shops List");
-        ShopAdapter mAdapter = new ShopAdapter(this, shops, this, mSpacesForAdsDAO, mAdsInShopsDAO);
+        ShopAdapter mAdapter = new ShopAdapter(this, shops, this);
         recyclerViewShops.setAdapter(mAdapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerViewShops.setLayoutManager(layoutManager);
@@ -335,10 +337,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void recyclerViewListClicked(View v, int position) {
         if (viewFlipper.getDisplayedChild() == 0) {
-            /*Shop chosenShop = shops.get(position);
+            Shop chosenShop = shops.get(position);
             Intent intent = new Intent(getApplicationContext(), DetailedShopInfoActivity.class);
-            intent.putExtra("shop", chosenShop);
-            startActivity(intent);*/
+            intent.putExtra(DBHelper.COLUMN_SHOP_ID, chosenShop.getId());
+            startActivity(intent);
         } else if (viewFlipper.getDisplayedChild() == 1) {
             // TODO Add new ad;
         }

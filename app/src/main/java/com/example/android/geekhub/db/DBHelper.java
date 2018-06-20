@@ -64,7 +64,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String TABLE_ORDERS = "orders";
     public static final String COLUMN_ORDER_AD_ID = COLUMN_ADS_IN_SHOPS_AD_ID;
     public static final String COLUMN_ORDER_SHOP_ID = COLUMN_ADS_IN_SHOPS_SHOP_ID;
-    public static final String COLUMN_ORDER_MATERIAL_TYPE__ID = COLUMN_MATERIAL_TYPE_ID;
+    public static final String COLUMN_ORDER_MATERIAL_TYPE_ID = COLUMN_MATERIAL_TYPE_ID;
     public static final String COLUMN_ORDER_DIMENSION_ID = COLUMN_DIMENSION_ID;
     public static final String COLUMN_ORDER_DESIGN_ID = COLUMN_DESIGN_ID;
     public static final String COLUMN_ORDER_QUANTITY = "quantity";
@@ -139,7 +139,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String SQL_CREATE_TABLE_ORDERS = "CREATE TABLE " + TABLE_ORDERS + "("
             + COLUMN_ORDER_AD_ID + " INTEGER, "
             + COLUMN_ORDER_SHOP_ID  + " INTEGER, "
-            + COLUMN_ORDER_MATERIAL_TYPE__ID  + " INTEGER, "
+            + COLUMN_ORDER_MATERIAL_TYPE_ID + " INTEGER, "
             + COLUMN_ORDER_DIMENSION_ID  + " INTEGER, "
             + COLUMN_ORDER_DESIGN_ID  + " INTEGER, "
             + COLUMN_ORDER_QUANTITY  + " INTEGER, "
@@ -147,7 +147,7 @@ public class DBHelper extends SQLiteOpenHelper {
             + COLUMN_ORDER_PRINT_PRICE  + " INTEGER, "
             + "FOREIGN KEY(" + COLUMN_ORDER_AD_ID + ") REFERENCES " + TABLE_ADS + "( " + COLUMN_AD_ID + "),"
             + "FOREIGN KEY(" + COLUMN_ORDER_SHOP_ID + ") REFERENCES " + TABLE_SHOPS + "( " + COLUMN_SHOP_ID + "),"
-            + "FOREIGN KEY(" + COLUMN_ORDER_MATERIAL_TYPE__ID + ") REFERENCES " + TABLE_MATERIAL_TYPES + "( " + COLUMN_MATERIAL_TYPE_ID + "),"
+            + "FOREIGN KEY(" + COLUMN_ORDER_MATERIAL_TYPE_ID + ") REFERENCES " + TABLE_MATERIAL_TYPES + "( " + COLUMN_MATERIAL_TYPE_ID + "),"
             + "FOREIGN KEY(" + COLUMN_ORDER_DIMENSION_ID + ") REFERENCES " + TABLE_DIMENSIONS + "( " + COLUMN_DIMENSION_ID + "),"
             + "FOREIGN KEY(" + COLUMN_ORDER_DESIGN_ID + ") REFERENCES " + TABLE_DESIGNS + "( " + COLUMN_DESIGN_ID + ")"
             + ");";
