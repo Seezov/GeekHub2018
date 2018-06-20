@@ -70,8 +70,6 @@ public class MainActivity extends AppCompatActivity
     private OrderDAO mOrderDAO;
     private MaterialDAO mMaterialDAO;
     private DesignDAO mDesignDAO;
-/*    @BindView(R.id.recycler_view_bands)
-    RecyclerView recyclerViewAds;*/
 
     ActionBar actionBar;
     List<Shop> shops = new ArrayList<>();
@@ -95,6 +93,7 @@ public class MainActivity extends AppCompatActivity
         mOrderDAO = new OrderDAO(this);
         mMaterialDAO = new MaterialDAO(this);
         mDesignDAO = new DesignDAO(this);
+        shops.clear();
         shops = mShopDao.getAllShops();
         if (shops != null && !shops.isEmpty()) {
             setupRecyclerShops();
@@ -184,7 +183,6 @@ public class MainActivity extends AppCompatActivity
                         setupContentAddAD();
                     })
                     .show();
-
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -233,8 +231,6 @@ public class MainActivity extends AppCompatActivity
     }*/
 
     private void setupContentShops() {
-        shops.clear();
-
         // TEST SHOPS
         mShopDao.createShop("SILPO");
         mShopDao.createShop("ATB");
@@ -249,10 +245,6 @@ public class MainActivity extends AppCompatActivity
         cal.set(Calendar.DAY_OF_MONTH, 3);
         Date endDate1 = cal.getTime();
 
-        // TEST ADDS
-        mAdDao.createAd(startDate1.getTime(), endDate1.getTime(), "FOTIUS");
-        mAdDao.createAd(startDate1.getTime(), endDate1.getTime(), "SKIDKA NA SHAMPYN");
-
         // TEST DIMENSIONS
         mDimensionDAO.createDimension(DimensionType.LARGE);
         mDimensionDAO.createDimension(DimensionType.SMALL);
@@ -260,10 +252,6 @@ public class MainActivity extends AppCompatActivity
         // TEST SPACE TYPES
         mSpaceDAO.createSpace(SpaceType.WALL);
         mSpaceDAO.createSpace(SpaceType.STAND);
-
-        // TEST DESIGNS
-        mDesignDAO.createDesign(1L, 1L, DesignType.EXPENSIVE, 100L);
-        mDesignDAO.createDesign(2L, 2L, DesignType.CHEAP, 50L);
 
         // TEST MATERIALS
         mMaterialDAO.createMaterial(MaterialType.PAPER);
@@ -274,9 +262,9 @@ public class MainActivity extends AppCompatActivity
         mSpacesForAdsDAO.createSpaceForAd(1L, 1L, 2L, 1L);
         mSpacesForAdsDAO.createSpaceForAd(1L, 2L, 1L, 1L);
 
-        // TEST ORDERS
+        /*// TEST ORDERS
         mOrderDAO.createOrder(1L,1L,1L,1L,1L,1L,200L,400L);
-        mOrderDAO.createOrder(2L,1L,2L,2L,2L,1L,400L,600L);
+        mOrderDAO.createOrder(2L,1L,2L,2L,2L,1L,400L,600L);*/
 
         //Dimension.LARGE, MaterialType.PAPER, DesignType.EXPENSIVE)
         //Dimension.LARGE, MaterialType.METAL, DesignType.EXPENSIVE)
