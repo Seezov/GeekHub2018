@@ -22,9 +22,13 @@
             android:id="@+id/nav_add_ad"
             android:icon="@drawable/ic_add_an_ad"
             android:title="Add an advertisement" />
-<!--        <item
-            android:id="@+id/nav_add_band"
-            android:icon="@drawable/ic_add_band"
-            android:title="Add ad" />-->
+        <item
+            android:id="@+id/nav_add_design"
+            android:icon="@drawable/ic_add_an_ad"
+            android:title="Add an design" />
+        <item
+            android:id="@+id/nav_add_order"
+            android:icon="@drawable/ic_add_an_ad"
+            android:title="Add an order" />
     </group>
 </menu>

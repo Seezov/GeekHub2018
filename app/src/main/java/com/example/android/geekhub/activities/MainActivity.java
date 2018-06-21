@@ -1,5 +1,6 @@
 package com.example.android.geekhub.activities;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,6 +16,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
@@ -33,16 +38,19 @@ import com.example.android.geekhub.dao.SpaceDAO;
 import com.example.android.geekhub.dao.SpacesForAdsDAO;
 import com.example.android.geekhub.db.DBHelper;
 import com.example.android.geekhub.entities.Ad;
+import com.example.android.geekhub.entities.Design;
+import com.example.android.geekhub.entities.Dimension;
+import com.example.android.geekhub.entities.Material;
 import com.example.android.geekhub.entities.Shop;
-import com.example.android.geekhub.entities.SpaceForAds;
-import com.example.android.geekhub.enums.DesignType;
 import com.example.android.geekhub.enums.DimensionType;
 import com.example.android.geekhub.enums.MaterialType;
 import com.example.android.geekhub.enums.SpaceType;
 import com.example.android.geekhub.listeners.RecyclerViewClickListener;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -61,6 +69,30 @@ public class MainActivity extends AppCompatActivity
     NavigationView navigationView;
     @BindView(R.id.recycler_view_shops)
     RecyclerView recyclerViewShops;
+
+    @BindView(R.id.btn_add_ad)
+    Button btnAddAd;
+    @BindView(R.id.f_ad_name)
+    EditText fAdName;
+    @BindView(R.id.f_start_date)
+    TextView txtStartDate;
+    @BindView(R.id.btn_add_start_date)
+    Button btnAddStartDate;
+    @BindView(R.id.f_end_date)
+    TextView txtEndDate;
+    @BindView(R.id.btn_add_end_date)
+    Button btnAddEndDate;
+    @BindView(R.id.dimensions_spinner)
+    Spinner dimensionsSpinner;
+    @BindView(R.id.designs_type_spinner)
+    Spinner designsSpinners;
+    @BindView(R.id.materials_spinner)
+    Spinner materialSpinner;
+    @BindView(R.id.shops_spinner)
+    Spinner shopsSpinner;
+    @BindView(R.id.ads_spinner)
+    Spinner adsSpinner;
+
     private ShopDAO mShopDao;
     private AdDAO mAdDao;
     private DimensionDAO mDimensionDAO;
@@ -70,6 +102,8 @@ public class MainActivity extends AppCompatActivity
     private OrderDAO mOrderDAO;
     private MaterialDAO mMaterialDAO;
     private DesignDAO mDesignDAO;
+
+    DateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
 
     ActionBar actionBar;
     List<Shop> shops = new ArrayList<>();
@@ -113,7 +147,186 @@ public class MainActivity extends AppCompatActivity
                     break;
             }
         });
+
+        setupDatePicker();
+
+        setupSpinners();
+
+        btnAddAd.setOnClickListener(view -> {
+            if (adFieldsAreCorrect()) {
+                addAdd();
+            }
+        });
     }
+
+    private boolean adFieldsAreCorrect() {
+        String adName = fAdName.getText().toString();
+        if (adName.equals("")) {
+            Toast.makeText(this, "Please enter an ad name!", Toast.LENGTH_SHORT).show();
+        } else if (startDateIfInPast()){
+            Toast.makeText(this, "Please enter a start date that isn't in the past!", Toast.LENGTH_SHORT).show();
+        } else if (endDateIfBeforeStartDate()){
+            Toast.makeText(this, "Please enter an end date that isn't before start date!", Toast.LENGTH_SHORT).show();
+        } else {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean endDateIfBeforeStartDate() {
+        String startDateString = txtStartDate.getText().toString();
+        String endDateString = txtEndDate.getText().toString();
+        Date startDate = null;
+        Date endDate = null;
+        try {
+            startDate = dateFormatter.parse(startDateString);
+            endDate = dateFormatter.parse(endDateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return endDate.before(startDate);
+    }
+
+    private boolean startDateIfInPast() {
+
+        String startDate = txtStartDate.getText().toString();
+        Date enteredDate = null;
+        try {
+            enteredDate = dateFormatter.parse(startDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Date nowDate = Calendar.getInstance().getTime();
+        Date todayDate = new Date(nowDate.getYear(), nowDate.getMonth(), nowDate.getDate());
+
+        return enteredDate.before(todayDate);
+    }
+
+    private void addAdd() {
+        Ad newAd = null;
+        try {
+           newAd  = new Ad(fAdName.getText().toString(),
+                    dateFormatter.parse(txtStartDate.getText().toString()),
+                    dateFormatter.parse(txtEndDate.getText().toString()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        mAdDao.createAd(newAd.getName(), newAd.getStartDate().getTime(), newAd.getEndDate().getTime());
+        Toast.makeText(this, "Ad is added!", Toast.LENGTH_SHORT).show();
+        setupAdSpinner();
+    }
+
+    private void setupSpinners() {
+        setupDimensionSpinner();
+
+        setupDesignSpinner();
+
+        setupMaterialSpinner();
+
+        setupShopSpinner();
+
+        setupAdSpinner();
+    }
+
+    //region Spinners
+    private void setupAdSpinner() {
+        // Ad spinner
+        List<Ad> ads = mAdDao.getAllAds();
+        List<String> adNames = new ArrayList<>();
+        for (Ad d : ads) {
+            adNames.add(d.getName());
+        }
+        ArrayAdapter<String> adapterAd = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, adNames);
+        adapterAd.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        adsSpinner.setAdapter(adapterAd);
+    }
+
+    private void setupShopSpinner() {
+        // Shop spinner
+        List<Shop> shops = mShopDao.getAllShops();
+        List<String> shopNames = new ArrayList<>();
+        for (Shop s : shops) {
+            shopNames.add(s.getName());
+        }
+        ArrayAdapter<String> adapterShop = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, shopNames);
+        adapterShop.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        shopsSpinner.setAdapter(adapterShop);
+    }
+
+    private void setupMaterialSpinner() {
+        // Material spinner
+        List<Material> materials = mMaterialDAO.getAllMaterials();
+        List<String> materialNames = new ArrayList<>();
+        for (Material m : materials) {
+            materialNames.add(m.getName());
+        }
+        ArrayAdapter<String> adapterMaterial = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, materialNames);
+        adapterMaterial.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        materialSpinner.setAdapter(adapterMaterial);
+    }
+
+    private void setupDesignSpinner() {
+        // Design spinner
+        List<Design> designs = mDesignDAO.getAllDesigns();
+        List<String> designNames = new ArrayList<>();
+        for (Design d : designs) {
+            designNames.add(d.getName());
+        }
+        ArrayAdapter<String> adapterDesigns = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, designNames);
+        adapterDesigns.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        designsSpinners.setAdapter(adapterDesigns);
+    }
+
+    private void setupDimensionSpinner() {
+        // Dim spinner
+        List<Dimension> dimensions = mDimensionDAO.getAllDimensions();
+        List<String> dimensionNames = new ArrayList<>();
+        for (Dimension d : dimensions) {
+            dimensionNames.add(d.getName());
+        }
+        ArrayAdapter<String> adapterDimensions = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, dimensionNames);
+        adapterDimensions.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        dimensionsSpinner.setAdapter(adapterDimensions);
+    }
+
+    private void setupDatePicker() {
+        Calendar newCalendar = Calendar.getInstance();
+
+        try {
+            txtStartDate.setText(dateFormatter.format(dateFormatter.parse(dateFormatter.format(newCalendar.getTime()))));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            txtEndDate.setText(dateFormatter.format(dateFormatter.parse(dateFormatter.format(newCalendar.getTime()))));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        DatePickerDialog startTime = new DatePickerDialog(this, R.style.DialogTheme, (view, year, monthOfYear, dayOfMonth) -> {
+            Calendar newDate = Calendar.getInstance();
+            newDate.set(year, monthOfYear, dayOfMonth);
+            txtStartDate.setText(dateFormatter.format(newDate.getTime()));
+        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+
+        btnAddStartDate.setOnClickListener(v -> startTime.show());
+
+        DatePickerDialog endTime = new DatePickerDialog(this, R.style.DialogTheme, (view, year, monthOfYear, dayOfMonth) -> {
+            Calendar newDate = Calendar.getInstance();
+            newDate.set(year, monthOfYear, dayOfMonth);
+            txtEndDate.setText(dateFormatter.format(newDate.getTime()));
+        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+
+        btnAddEndDate.setOnClickListener(v -> endTime.show());
+    }
+    //end region
 
     public void setupActionBar() {
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -168,7 +381,7 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_shop_list) {
             viewFlipper.setDisplayedChild(0);
-            setupContentShops();
+            setupRecyclerShops();
         } else if (id == R.id.nav_add_ad) {
             new MaterialDialog.Builder(this)
                     .title("ADMIN FUNCTION")
@@ -180,7 +393,38 @@ public class MainActivity extends AppCompatActivity
                     .onNegative((dialog, which) -> item.setChecked(false))
                     .onPositive((dialog, which) -> {
                         viewFlipper.setDisplayedChild(1);
-                        setupContentAddAD();
+                        // TODO FIX THIS
+                        setupRecyclerAddAd();
+                    })
+                    .show();
+        } else if (id == R.id.nav_add_design) {
+            new MaterialDialog.Builder(this)
+                    .title("ADMIN FUNCTION")
+                    .content("WAIT, THIS FUNCTION IS ONLY AVAILABLE IF YOU ARE THE ADMIN! ARE YOU?")
+                    .positiveColorRes(R.color.colorPrimaryDark)
+                    .negativeColorRes(R.color.colorPrimaryDark)
+                    .positiveText("Ye, sure!")
+                    .negativeText("No, i'm not")
+                    .onNegative((dialog, which) -> item.setChecked(false))
+                    .onPositive((dialog, which) -> {
+                        viewFlipper.setDisplayedChild(2);
+                        // TODO FIX THIS
+                        setupRecyclerAddAd();
+                    })
+                    .show();
+        } else if (id == R.id.nav_add_order) {
+            new MaterialDialog.Builder(this)
+                    .title("ADMIN FUNCTION")
+                    .content("WAIT, THIS FUNCTION IS ONLY AVAILABLE IF YOU ARE THE ADMIN! ARE YOU?")
+                    .positiveColorRes(R.color.colorPrimaryDark)
+                    .negativeColorRes(R.color.colorPrimaryDark)
+                    .positiveText("Ye, sure!")
+                    .negativeText("No, i'm not")
+                    .onNegative((dialog, which) -> item.setChecked(false))
+                    .onPositive((dialog, which) -> {
+                        viewFlipper.setDisplayedChild(3);
+                        // TODO FIX THIS
+                        setupRecyclerAddAd();
                     })
                     .show();
         }
@@ -188,7 +432,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private void setupContentAddAD() {
+    private void setupRecyclerAddAd() {
         ((TextView) actionBar.getCustomView().findViewById(R.id.txt_title)).setText("Add ad");
     }
 

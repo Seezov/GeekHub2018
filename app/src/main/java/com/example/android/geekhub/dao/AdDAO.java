@@ -28,7 +28,7 @@ public class AdDAO extends BaseDAO {
         super(context);
     }
 
-    public Ad createAd(Long dateStart, Long dateEnd, String name) {
+    public Ad createAd(String name, Long dateStart, Long dateEnd) {
         ContentValues values = new ContentValues();
         values.put(DBHelper.COLUMN_AD_DATE_START, dateStart);
         values.put(DBHelper.COLUMN_AD_DATE_END, dateEnd);

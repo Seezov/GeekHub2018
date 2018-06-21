@@ -11,70 +11,68 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textSize="26sp"
+        android:textSize="24sp"
         android:textColor="@android:color/black"
-        android:text="HERE YOU CAN ADD AN AD"
+        android:text="HERE YOU CAN ADD A DESIGN"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.v7.widget.AppCompatEditText
-        android:id="@+id/f_ad_name"
+        android:id="@+id/f_design_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Ad name"
+        android:hint="Design name"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_title"/>
 
     <TextView
-        android:id="@+id/f_start_date"
+        android:id="@+id/txt_choose_dimension"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="24sp"
-        android:text="00/00/0000"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="@+id/btn_add_start_date"
-        app:layout_constraintTop_toBottomOf="@+id/f_ad_name" />
-
-    <Button
-        android:id="@+id/btn_add_start_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Add start date"
         android:textSize="18sp"
-        app:layout_constraintStart_toEndOf="@+id/f_start_date"
+        android:text="Pick a dimension"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/f_ad_name"/>
+        app:layout_constraintTop_toBottomOf="@+id/f_design_name" />
+
+    <Spinner
+        android:id="@+id/dimensions_spinner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_choose_dimension"/>
 
     <TextView
-        android:id="@+id/f_end_date"
+        android:id="@+id/txt_choose_ad"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="24sp"
-        android:text="00/00/0000"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="@+id/btn_add_end_date"
-        app:layout_constraintTop_toBottomOf="@+id/f_start_date" />
-
-    <Button
-        android:id="@+id/btn_add_end_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Add end date"
         android:textSize="18sp"
-        app:layout_constraintStart_toEndOf="@+id/f_end_date"
+        android:text="Pick an ad"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_add_start_date"/>
+        app:layout_constraintTop_toBottomOf="@+id/dimensions_spinner" />
+
+    <Spinner
+        android:id="@+id/ads_spinner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_choose_ad"/>
 
     <Button
         android:id="@+id/btn_add_ad"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="Add ad"
+        android:text="Add design"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_add_end_date"/>
+        app:layout_constraintTop_toBottomOf="@+id/ads_spinner"/>
 </android.support.constraint.ConstraintLayout>

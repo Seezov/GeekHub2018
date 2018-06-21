@@ -63,7 +63,7 @@ public class DimensionDAO extends BaseDAO {
                 + " = " + id, null);
     }*/
 
-    public List<Dimension> getAllShops() {
+    public List<Dimension> getAllDimensions() {
         List<Dimension> listDimensions = new ArrayList<>();
 
         Cursor cursor = mDatabase.query(DBHelper.TABLE_DIMENSIONS, mAllColumns,

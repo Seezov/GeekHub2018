@@ -63,7 +63,7 @@ public class MaterialDAO extends BaseDAO {
                 + " = " + id, null);
     }*/
 
-    public List<Material> getAllShops() {
+    public List<Material> getAllMaterials() {
         List<Material> listMaterials = new ArrayList<>();
 
         Cursor cursor = mDatabase.query(DBHelper.TABLE_MATERIAL_TYPES, mAllColumns,

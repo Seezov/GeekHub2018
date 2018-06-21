@@ -17,6 +17,10 @@
 
         <include layout="@layout/activity_add_ad" />
 
+        <include layout="@layout/activity_add_design" />
+
+        <include layout="@layout/activity_add_order" />
+
     </ViewFlipper>
 
     <android.support.design.widget.NavigationView
