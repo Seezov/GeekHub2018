@@ -78,6 +78,16 @@ public class AdDAO extends BaseDAO {
         return cursorToAd(cursor);
     }
 
+    public Ad getAdByName(String adName) {
+        Cursor cursor = mDatabase.query(DBHelper.TABLE_ADS, mAllColumns,
+                DBHelper.COLUMN_AD_NAME + " = ?",
+                new String[]{adName}, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+        return cursorToAd(cursor);
+    }
+
     protected Ad cursorToAd(Cursor cursor) {
         Ad ad = new Ad();
         ad.setId(cursor.getLong(0));

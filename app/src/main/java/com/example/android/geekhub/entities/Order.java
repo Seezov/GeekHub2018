@@ -14,6 +14,17 @@ public class Order {
     public Order() {
     }
 
+    public Order(long idAd, long idShop, long idMaterialType, long idDimension, long idDesign, long quantity, long materialPrice, long printPrice) {
+        this.idAd = idAd;
+        this.idShop = idShop;
+        this.idMaterialType = idMaterialType;
+        this.idDimension = idDimension;
+        this.idDesign = idDesign;
+        this.quantity = quantity;
+        this.materialPrice = materialPrice;
+        this.printPrice = printPrice;
+    }
+
     public long getIdAd() {
         return idAd;
     }

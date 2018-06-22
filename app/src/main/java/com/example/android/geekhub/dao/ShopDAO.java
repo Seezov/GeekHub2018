@@ -93,6 +93,17 @@ public class ShopDAO extends BaseDAO {
         return cursorToShop(cursor);
     }
 
+    public Shop getShopByName(String shopName) {
+        Cursor cursor = mDatabase.query(DBHelper.TABLE_SHOPS, mAllColumns,
+                DBHelper.COLUMN_SHOP_NAME + " = ?",
+                new String[]{shopName}, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+
+        return cursorToShop(cursor);
+    }
+
     protected Shop cursorToShop(Cursor cursor) {
         Shop shop = new Shop();
         shop.setId(cursor.getLong(0));

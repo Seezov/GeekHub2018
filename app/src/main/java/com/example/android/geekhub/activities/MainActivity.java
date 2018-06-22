@@ -25,6 +25,7 @@ import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.annimon.stream.Stream;
 import com.example.android.geekhub.R;
 import com.example.android.geekhub.adapters.ShopAdapter;
 import com.example.android.geekhub.dao.AdDAO;
@@ -41,7 +42,10 @@ import com.example.android.geekhub.entities.Ad;
 import com.example.android.geekhub.entities.Design;
 import com.example.android.geekhub.entities.Dimension;
 import com.example.android.geekhub.entities.Material;
+import com.example.android.geekhub.entities.Order;
 import com.example.android.geekhub.entities.Shop;
+import com.example.android.geekhub.entities.Space;
+import com.example.android.geekhub.entities.SpaceForAds;
 import com.example.android.geekhub.enums.DimensionType;
 import com.example.android.geekhub.enums.MaterialType;
 import com.example.android.geekhub.enums.SpaceType;
@@ -54,6 +58,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -72,8 +77,16 @@ public class MainActivity extends AppCompatActivity
 
     @BindView(R.id.btn_add_ad)
     Button btnAddAd;
+    @BindView(R.id.btn_add_design)
+    Button btnAddDesign;
+    @BindView(R.id.btn_add_order)
+    Button btnAddOrder;
     @BindView(R.id.f_ad_name)
     EditText fAdName;
+    @BindView(R.id.f_order_quantity)
+    EditText txtOrderQuantity;
+    @BindView(R.id.f_design_name)
+    EditText fDesignName;
     @BindView(R.id.f_start_date)
     TextView txtStartDate;
     @BindView(R.id.btn_add_start_date)
@@ -157,6 +170,148 @@ public class MainActivity extends AppCompatActivity
                 addAdd();
             }
         });
+
+        btnAddDesign.setOnClickListener(view -> {
+            if (designFieldsAreCorrect()) {
+                int price = dimensionsSpinner.getSelectedItem().equals("Large")
+                        ? 100 : 50;
+                new MaterialDialog.Builder(this)
+                        .title("Design price")
+                        .content("This design will cost you " + price +" UAH. Okay?")
+                        .positiveColorRes(R.color.colorPrimaryDark)
+                        .negativeColorRes(R.color.colorPrimaryDark)
+                        .positiveText("Ye, sure!")
+                        .negativeText("No, this is too much!")
+                        .onPositive((dialog, which) -> addDesign())
+                        .show();
+            }
+        });
+
+        btnAddOrder.setOnClickListener(view -> {
+            if (orderFieldsAreCorrect()) {
+                Design selectedDesign =  mDesignDAO.getDesignByName(designsSpinners.getSelectedItem().toString());
+                long materialPrice = materialSpinner.getSelectedItem().equals("Metal")
+                        ? 200 : 25;
+                materialPrice *= mDimensionDAO.getDimensionById(selectedDesign.getIdDimension()).getName().equals("Large") ? 4 : 2;
+                long price = (materialPrice + selectedDesign.getPrice()) * Integer.valueOf(txtOrderQuantity.getText().toString());
+                long finalMaterialPrice = materialPrice;
+                new MaterialDialog.Builder(this)
+                        .title("Complete price")
+                        .content("This material price is " + materialPrice + " UAH.\n" +
+                                "The design price will cost you " + selectedDesign.getPrice() + " UAH.\n" +
+                                "And the complete order will cost you " + price + " UAH. Okay?")
+                        .positiveColorRes(R.color.colorPrimaryDark)
+                        .negativeColorRes(R.color.colorPrimaryDark)
+                        .positiveText("Ye, sure!")
+                        .negativeText("No, this is too much!")
+                        .onPositive((dialog, which) -> addOrder(finalMaterialPrice, price))
+                        .show();
+            }
+        });
+    }
+
+    private void addOrder(Long materialPrice, Long price) {
+        Shop selectedShop = mShopDao.getShopByName(shopsSpinner.getSelectedItem().toString());
+        Design selectedDesign = mDesignDAO.getDesignByName(designsSpinners.getSelectedItem().toString());
+        Dimension selectedDimension = mDimensionDAO.getDimensionById(selectedDesign.getIdDimension());
+        Ad selectedAd = mAdDao.getAdById(selectedDesign.getIdAd());
+        Material selectedMaterial = mMaterialDAO.getMaterialByName(materialSpinner.getSelectedItem().toString());
+        Order newOrder = new Order(selectedAd.getId(),
+                selectedShop.getId(),
+                selectedMaterial.getId(),
+                selectedDimension.getId(),
+                selectedDesign.getId(),
+                Long.valueOf(txtOrderQuantity.getText().toString()),
+                materialPrice,
+                price
+        );
+        mOrderDAO.createOrder(newOrder.getIdAd(),
+                newOrder.getIdShop(),
+                newOrder.getIdMaterialType(),
+                newOrder.getIdDimension(),
+                newOrder.getIdDesign(),
+                newOrder.getQuantity(),
+                newOrder.getMaterialPrice(),
+                newOrder.getPrintPrice()
+        );
+        //mAdsInShopsDAO.createAdInShop(selectedAd.getId(), selectedShop.getId());
+        Toast.makeText(this, "Order is added!", Toast.LENGTH_SHORT).show();
+    }
+
+    private boolean orderFieldsAreCorrect() {
+        if (designsSpinners.getSelectedItem() == null){
+            Toast.makeText(this, "Please add a design first!", Toast.LENGTH_SHORT).show();
+        } else if(txtOrderQuantity.getText().toString().equals("")){
+            Toast.makeText(this, "Please enter a quantity", Toast.LENGTH_SHORT).show();
+        } else if(txtOrderQuantity.getText().toString().equals("0")){
+            Toast.makeText(this, "You can't by 0 items!", Toast.LENGTH_SHORT).show();
+        } else {
+            return adCanBeAddedToTheShop();
+        }
+        return false;
+    }
+
+    private boolean adCanBeAddedToTheShop() {
+        Shop selectedShop = mShopDao.getShopByName(shopsSpinner.getSelectedItem().toString());
+        Design selectedDesign = mDesignDAO.getDesignByName(designsSpinners.getSelectedItem().toString());
+        Dimension selectedDimension = mDimensionDAO.getDimensionById(selectedDesign.getIdDimension());
+        Ad selectedAd = mAdDao.getAdById(selectedDesign.getIdAd());
+        List<SpaceForAds> spaces = mSpacesForAdsDAO.getSpacesInShop(selectedShop.getId());
+        spaces = Stream.of(spaces)
+                .filter(s -> s.getIdDimension() == selectedDimension.getId()).toList();
+        // If spaces is 0, then there are no spaces for ads with this dimension in selected shop
+        if (spaces.size() == 0) {
+            Toast.makeText(this, "There are no spaces for ads with this dimension in selected shop.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (spaces.size() < Integer.valueOf(txtOrderQuantity.getText().toString())) {
+            Toast.makeText(this, "There are not enough spaces for ads with this dimension in selected shop.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        List<Ad> adsInShop = mAdsInShopsDAO.geAdsInShop(selectedShop.getId());
+        // if adsInShop is 0, there are no ads in this shop.
+        if (adsInShop.size() == 0) {
+            return true;
+        }
+        adsInShop = Stream.of(adsInShop)
+                .filter(a -> mDesignDAO.getDesignByAd(a.getId()).getIdDimension() == selectedDimension.getId()).toList();
+        // If adsInShop is now 0, there are no ads in this dimension in this shop.
+        if (adsInShop.size() == 0) {
+            return true;
+        }
+        adsInShop = Stream.of(adsInShop)
+                .filter(a -> selectedAd.getStartDate().after(a.getEndDate())).toList();
+        // If start date of OUR ad is after at least 1 ad in shop then we can ad it after.
+        if (adsInShop.size() != 0) {
+            return true;
+        }
+        Toast.makeText(this, "There are no free spaces for your ad on this date.", Toast.LENGTH_SHORT).show();
+        return false;
+    }
+
+    private void addDesign() {
+        Dimension selectedDimension = mDimensionDAO.getDimensionByName(dimensionsSpinner.getSelectedItem().toString());
+        Ad selectedAd = mAdDao.getAdByName(adsSpinner.getSelectedItem().toString());
+        Design newDesign = new Design(selectedDimension.getId(),
+                selectedAd.getId(),
+                fDesignName.getText().toString(),
+                selectedDimension.getName().equals("Large") ? 100 : 50);
+
+        mDesignDAO.createDesign(newDesign.getIdDimension(), newDesign.getIdAd(), newDesign.getName(), newDesign.getPrice());
+        Toast.makeText(this, "Design is added!", Toast.LENGTH_SHORT).show();
+        setupDesignSpinner();
+    }
+
+    private boolean designFieldsAreCorrect() {
+        String adName = fDesignName.getText().toString();
+        if (adName.equals("")) {
+            Toast.makeText(this, "Please enter a design name!", Toast.LENGTH_SHORT).show();
+        } else if (adsSpinner.getSelectedItem() == null){
+            Toast.makeText(this, "Please add an ad first!", Toast.LENGTH_SHORT).show();
+        } else {
+            return true;
+        }
+        return false;
     }
 
     private boolean adFieldsAreCorrect() {
@@ -189,7 +344,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     private boolean startDateIfInPast() {
-
         String startDate = txtStartDate.getText().toString();
         Date enteredDate = null;
         try {

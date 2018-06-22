@@ -92,6 +92,16 @@ public class DimensionDAO extends BaseDAO {
         return cursorToDimension(cursor);
     }
 
+    public Dimension getDimensionByName(String dimName) {
+        Cursor cursor = mDatabase.query(DBHelper.TABLE_DIMENSIONS, mAllColumns,
+                DBHelper.COLUMN_DIMENSION_NAME + " = ?",
+                new String[]{dimName}, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+        return cursorToDimension(cursor);
+    }
+
     protected Dimension cursorToDimension(Cursor cursor) {
         Dimension dimension = new Dimension();
         dimension.setId(cursor.getLong(0));

@@ -92,6 +92,16 @@ public class MaterialDAO extends BaseDAO {
         return cursorToMaterial(cursor);
     }
 
+    public Material getMaterialByName(String name) {
+        Cursor cursor = mDatabase.query(DBHelper.TABLE_MATERIAL_TYPES, mAllColumns,
+                DBHelper.COLUMN_MATERIAL_TYPE_NAME + " = ?",
+                new String[]{name}, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+        return cursorToMaterial(cursor);
+    }
+
     protected Material cursorToMaterial(Cursor cursor) {
         Material material = new Material();
         material.setId(cursor.getLong(0));

@@ -97,7 +97,7 @@ public class AdAdapter extends RecyclerView.Adapter<AdAdapter.BandViewHolder> {
         Design currentDesign = mDesignDAO.getDesignByAd(ad.getId());
         String designType = currentDesign.getName();
         String dimension = mDimensionDAO.getDimensionById(currentDesign.getIdDimension()).getName();
-        return "Design is " + designType + " and " + dimension;
+        return "Design name is " + designType + " and it's dimension is " + dimension;
     }
 
     class BandViewHolder extends RecyclerView.ViewHolder {

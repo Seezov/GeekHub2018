@@ -15,8 +15,7 @@ public class Design {
     public Design() {
     }
 
-    public Design(long id, long idDimension, long idAd, String name, long price) {
-        this.id = id;
+    public Design(long idDimension, long idAd, String name, long price) {
         this.idDimension = idDimension;
         this.idAd = idAd;
         this.name = name;
